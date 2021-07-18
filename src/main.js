@@ -50,7 +50,9 @@ router.beforeEach((to, from, next) => {
     next();
   } else if (!store.state.userId) {
     // 判断用户是否登录
-    next({ path: "/login" });
+    next({
+      path: "/login"
+    });
   } else {
     next();
   }
@@ -94,7 +96,6 @@ new Vue({
   store,
   render: h => h(App),
   create() {
-    console.log((this.$route.path));
     // 刷新页面查询用户菜单
     if (store.state.userId != null) {
       generateMenu();

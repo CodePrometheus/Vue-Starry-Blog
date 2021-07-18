@@ -49,21 +49,36 @@
     </el-row>
     <!-- 一周访问量展示 -->
     <el-card style="margin-top:1.25rem">
-      <div style="height:350px"><v-chart :options="viewCount" /></div>
+      <div class="e-title">一周访问量</div>
+      <div style="height:350px">
+        <v-chart
+          :options="viewCount"
+          v-loading="loading" />
+      </div>
     </el-card>
     <el-row :gutter="30" style="margin-top:1.25rem">
       <!-- 文章浏览量排行 -->
       <el-col :span="16">
         <el-card>
+          <div class="e-title">文章浏览量排行</div>
           <div style="height:350px">
-            <v-chart :options="ariticleRank" />
+            <v-chart
+              :options="articleRank"
+              v-loading="loading" />
           </div>
         </el-card>
       </el-col>
       <!-- 分类数据统计 -->
       <el-col :span="8">
         <el-card>
-          <div style="height:350px"><v-chart :options="category" /></div>
+          <div style="height:350px">
+            <div class="e-title">分类数据统计</div>
+            <div style="height:350px">
+              <v-chart
+                :options="category"
+                v-loading="loading" />
+            </div>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -77,6 +92,7 @@ export default {
   },
   data: function() {
     return {
+      loading: true,
       viewsCount: 0,
       messageCount: 0,
       userCount: 0,
@@ -90,7 +106,7 @@ export default {
         },
         color: ["#3888fa"],
         legend: {
-          data: ["用户量"]
+          data: ["访问量"]
         },
         grid: {
           left: "0%",
@@ -100,19 +116,11 @@ export default {
           containLabel: true
         },
         xAxis: {
-          data: [
-            "星期一",
-            "星期二",
-            "星期三",
-            "星期四",
-            "星期五",
-            "星期六",
-            "星期天"
-          ],
+          data: [],
           axisLine: {
             lineStyle: {
               // 设置x轴颜色
-              color: "#048CCE"
+              color: "#666"
             }
           }
         },
@@ -126,14 +134,14 @@ export default {
         },
         series: [
           {
-            name: "用户量",
+            name: "访问量",
             type: "line",
             data: [],
             smooth: true
           }
         ]
       },
-      ariticleRank: {
+      articleRank: {
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -148,12 +156,6 @@ export default {
           top: "10%",
           containLabel: true
         },
-        axisLabel: {
-          formatter: function(val) {
-            return val.length > 12 ? val.substr(0, 12) + "..." : val;
-          }
-        },
-
         xAxis: {
           data: []
         },
@@ -199,7 +201,11 @@ export default {
         this.messageCount = data.data.messageCount;
         this.userCount = data.data.userCount;
         this.articleCount = data.data.articleCount;
-        this.viewCount.series[0].data = data.data.uniqueViewDTOList;
+
+        data.data.uniqueViewDTOList.forEach(item => {
+          this.viewCount.xAxis.data.push(item.day);
+          this.viewCount.series[0].data.push(item.viewCount);
+        });
         data.data.categoryDTOList.forEach(item => {
           this.category.series[0].data.push({
             value: item.articleCount,
@@ -208,8 +214,8 @@ export default {
           this.category.legend.data.push(item.categoryName);
         });
         data.data.articleRankDTOList.forEach(item => {
-          this.ariticleRank.series[0].data.push(item.viewsCount);
-          this.ariticleRank.xAxis.data.push(item.articleTitle);
+          this.articleRank.series[0].data.push(item.viewsCount);
+          this.articleRank.xAxis.data.push(item.articleTitle);
         });
       });
     }
@@ -222,23 +228,33 @@ export default {
   display: inline-block;
   font-size: 3rem;
 }
+
 .card-desc {
   font-weight: bold;
   float: right;
 }
+
 .card-title {
   margin-top: 0.3rem;
   line-height: 18px;
   color: rgba(0, 0, 0, 0.45);
   font-size: 1rem;
 }
+
 .card-count {
   margin-top: 0.75rem;
   color: #666;
   font-size: 1.25rem;
 }
+
 .echarts {
   width: 100%;
   height: 100%;
+}
+
+.e-title {
+  font-size: 13px;
+  color: #202a34;
+  font-weight: 700;
 }
 </style>
