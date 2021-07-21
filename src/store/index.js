@@ -9,7 +9,6 @@ export default new Vuex.Store({
     collapse: false,
     tabList: [{ name: "首页", path: "/" }],
     userId: null,
-    // userRole: null,
     roleList: null,
     avatar: null,
     nickname: null,

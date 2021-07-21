@@ -41,19 +41,9 @@
               @keyup.enter.native="login"
             ></el-input>
           </el-form-item>
-          <el-form-item style="width:100%;">
-            <el-button
-              :loading="loading"
-              size="small"
-              type="primary"
-              style="width:100%;"
-              class="login-submit"
-              @click.native.prevent="login"
-            >
-              <span v-if="!loading">登 录</span>
-              <span v-else>登 录 中...</span>
-            </el-button>
-          </el-form-item>
+          <el-form>
+            <el-button class="login-submit" type="primary" @click="login">登录</el-button>
+          </el-form>
         </div>
       </div>
     </el-form>
@@ -102,10 +92,9 @@ export default {
                   if (data.flag) {
                     // 登录后保存用户信息
                     that.$store.commit("login", data.data);
-                    // 跳转首页
-                    that.$message.success(data.message);
                     // 加载用户菜单
                     generateMenu();
+                    that.$message.success("登录成功");
                     that.$router.push({ path: "/" });
                   } else {
                     that.$message.error(data.message);
