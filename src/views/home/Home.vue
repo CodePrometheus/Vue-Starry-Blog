@@ -53,7 +53,9 @@
       <div style="height:350px">
         <v-chart
           :options="viewCount"
-          v-loading="loading" />
+          v-loading="loading"
+          element-loading-text="Loading..."
+        />
       </div>
     </el-card>
     <el-row :gutter="30" style="margin-top:1.25rem">
@@ -64,7 +66,8 @@
           <div style="height:350px">
             <v-chart
               :options="articleRank"
-              v-loading="loading" />
+              v-loading="loading"
+              element-loading-text="Loading..." />
           </div>
         </el-card>
       </el-col>
@@ -76,7 +79,8 @@
             <div style="height:350px">
               <v-chart
                 :options="category"
-                v-loading="loading" />
+                v-loading="loading"
+                element-loading-text="Loading..." />
             </div>
           </div>
         </el-card>

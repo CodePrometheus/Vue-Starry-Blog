@@ -39,6 +39,7 @@
       :data="messageList"
       @selection-change="selectionChange"
       v-loading="loading"
+      element-loading-text="Loading..."
     >
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
