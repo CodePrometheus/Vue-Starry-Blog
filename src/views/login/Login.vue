@@ -14,12 +14,12 @@
           class="img"
           src="https://gitee.com/codeprometheus/MyPicBed/raw/master/img/star.png"
         />
-        <p class="title">Vue-Starry-Blog</p>
+        <p class="tit">Vue-Starry-Blog</p>
       </div>
 
       <div class="login-border">
         <div class="login-main">
-          <h3 class="title">Login</h3>
+          <h3 class="tit">Login</h3>
           <el-form-item prop="username">
             <el-input
               size="small"
@@ -179,7 +179,7 @@ export default {
   overflow: hidden;
 }
 
-.login-left .title {
+.login-left .tit {
   margin-top: 60px;
   text-align: center;
   color: #fff;
@@ -213,7 +213,7 @@ export default {
   color: #76838f;
 }
 
-.title {
+.tit {
   position: relative;
   color: #333;
   margin-bottom: 40px;

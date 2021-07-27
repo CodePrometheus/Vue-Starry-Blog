@@ -32,3 +32,17 @@ body{
 .v-note-wrapper.fullscreen {
   height: 100vh !important;
 }
+.title {
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #202a34;
+}
+.title::before {
+    content: '';
+    width: 24px;
+    height: 16px;
+    border-left: 3px solid #0081ff;
+    margin-right: 20px;
+}
