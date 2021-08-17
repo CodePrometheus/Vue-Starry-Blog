@@ -84,7 +84,7 @@ export default {
             this.config.TENCENT_CAPTCHA,
             function(res) {
               if (res.ret === 0) {
-                //发送登录请求
+                // 发送登录请求
                 let param = new URLSearchParams();
                 param.append("username", that.loginForm.username);
                 param.append("password", that.loginForm.password);

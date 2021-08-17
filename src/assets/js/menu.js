@@ -36,5 +36,5 @@ export function generateMenu() {
 
 export const loadView = view => {
   // 路由懒加载
-  return reslove => require([`@/views${view}`], reslove);
+  return resolve => require([`@/views${view}`], resolve);
 };

@@ -21,7 +21,6 @@ import "mavon-editor/dist/css/index.css";
 import moment from "moment";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { generateMenu } from "@/assets/js/menu";
 
 Vue.prototype.config = config;
 Vue.use(mavonEditor);
@@ -63,7 +62,8 @@ router.afterEach(() => {
 });
 
 // 拦截异常
-axios.interceptors.response.use(function(response) {
+axios.interceptors.response.use(
+  function(response) {
     switch (response.data.code) {
       case 4001:
         Vue.prototype.$message({
@@ -89,16 +89,11 @@ axios.interceptors.response.use(function(response) {
   },
   function(error) {
     return Promise.reject(error);
-  });
+  }
+);
 
 new Vue({
   router,
   store,
-  render: h => h(App),
-  create() {
-    // 刷新页面查询用户菜单
-    if (store.state.userId != null) {
-      generateMenu();
-    }
-  }
+  render: h => h(App)
 }).$mount("#app");
