@@ -63,7 +63,7 @@
             class="upload-cover"
             drag
             :show-file-list="false"
-            action="/api/admin/articles/images"
+            action="/api/admin/page/images"
             multiple
             :on-success="uploadCover"
           >

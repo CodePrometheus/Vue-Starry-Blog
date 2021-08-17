@@ -2,7 +2,6 @@
   <el-container>
     <!-- 侧边栏 -->
     <el-aside width="auto">
-      <Logo />
       <SideBar />
     </el-aside>
     <el-container :class="'main-container ' + isHide">
@@ -25,13 +24,11 @@
 <script>
 import NavBar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import Logo from "./components/Logo";
 
 export default {
   components: {
     NavBar,
-    SideBar,
-    Logo
+    SideBar
   },
   computed: {
     isHide() {

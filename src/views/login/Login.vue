@@ -252,7 +252,7 @@ a {
 }
 
 .el-input >>> .el-input__inner {
-  outline:medium;
+  outline: medium;
   padding-bottom: 10px;
   text-indent: 5px;
   background: transparent;
