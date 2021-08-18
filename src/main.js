@@ -18,20 +18,26 @@ import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
-import moment from "moment";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import VueCalendarHeatmap from "vue-calendar-heatmap";
+import dayjs from "dayjs";
 
 Vue.prototype.config = config;
 Vue.use(mavonEditor);
 Vue.component("v-chart", ECharts);
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
+Vue.use(VueCalendarHeatmap);
 Vue.config.productionTip = false;
-Vue.prototype.$moment = moment;
+Vue.prototype.$moment = dayjs;
 
-Vue.filter("date", function(value, formatStr = "YYYY-MM-DD HH:mm:ss") {
-  return moment(value).format(formatStr);
+Vue.filter("date", function(value, formatStr = "YYYY-MM-DD") {
+  return dayjs(value).format(formatStr);
+});
+
+Vue.filter("dateTime", function(value, formatStr = "YYYY-MM-DD HH:mm:ss") {
+  return dayjs(value).format(formatStr);
 });
 
 NProgress.configure({
@@ -71,12 +77,6 @@ axios.interceptors.response.use(
           message: response.data.message
         });
         router.push({ path: "/login" });
-        break;
-      case 4002:
-        Vue.prototype.$message({
-          type: "error",
-          message: response.data.message
-        });
         break;
       case 5000:
         Vue.prototype.$message({

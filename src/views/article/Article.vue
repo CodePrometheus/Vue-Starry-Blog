@@ -127,7 +127,7 @@
             <div class="popover-container">
               <div style="margin-bottom:1rem">添加标签</div>
               <el-tag
-                v-for="(v, idx) of categoryList"
+                v-for="(v, idx) of tagList"
                 :key="idx"
                 :class="tagClass(v)"
                 @click="addTag(v)"
@@ -405,8 +405,8 @@ export default {
         return false;
       }
       if (this.article.articleCover.trim() == "") {
-        this.$message.error("文章封面不能为空");
-        return false;
+        // 如果图片为空，则生成随机图片
+        this.article.articleCover = "https://unsplash.it" + "/" + "600" + "/" + "400" + "?random=" + parseInt(Math.random() * 10, 10);
       }
       this.article.isDraft = 0;
       this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
@@ -473,34 +473,41 @@ export default {
   margin-bottom: 1.25rem;
   margin-top: 2.25rem;
 }
+
 .save-btn {
   margin-left: 0.75rem;
   background: #fff;
   color: #f56c6c;
 }
+
 .tag-item {
   margin-right: 1rem;
   margin-bottom: 1rem;
   cursor: pointer;
 }
+
 .tag-item-select {
   margin-right: 1rem;
   margin-bottom: 1rem;
   cursor: not-allowed;
   color: #ccccd8 !important;
 }
+
 .category-item {
   cursor: pointer;
   padding: 0.6rem 0.5rem;
 }
+
 .category-item:hover {
   background-color: #f0f9eb;
   color: #67c23a;
 }
+
 .popover-title {
   margin-bottom: 1rem;
   text-align: center;
 }
+
 .popover-container {
   margin-top: 1rem;
   height: 260px;

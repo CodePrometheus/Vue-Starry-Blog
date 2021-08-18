@@ -16,17 +16,6 @@
       <el-col :span="6">
         <el-card>
           <div class="card-icon-container">
-            <i class="el-icon-s-comment" style="color:#36A3F7" />
-          </div>
-          <div class="card-desc">
-            <div class="card-title">留言量</div>
-            <div class="card-count">{{ messageCount }}</div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card>
-          <div class="card-icon-container">
             <i class="iconfont el-icon-myuser" style="color:#34BFA3" />
           </div>
           <div class="card-desc">
@@ -46,6 +35,17 @@
           </div>
         </el-card>
       </el-col>
+      <el-col :span="6">
+        <el-card>
+          <div class="card-icon-container">
+            <i class="el-icon-s-comment" style="color:#36A3F7" />
+          </div>
+          <div class="card-desc">
+            <div class="card-title">留言量</div>
+            <div class="card-count">{{ messageCount }}</div>
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
     <!-- 一周访问量展示 -->
     <el-card style="margin-top:1.25rem">
@@ -58,6 +58,18 @@
         />
       </div>
     </el-card>
+    <!-- 文章贡献统计 -->
+    <el-card style="margin-top: 1.25rem">
+      <div class="e-title">文章贡献统计</div>
+      <div v-loading="loading" element-loading-text="Loading...">
+        <!-- 颜色同Github -->
+        <calendar-heatmap
+          :end-date="new Date()"
+          :values="articleStatisticsList"
+          :range-color="['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#2ba852']"
+        />
+      </div>
+    </el-card>
     <el-row :gutter="30" style="margin-top:1.25rem">
       <!-- 文章浏览量排行 -->
       <el-col :span="16">
@@ -67,21 +79,21 @@
             <v-chart
               :options="articleRank"
               v-loading="loading"
-              element-loading-text="Loading..." />
+              element-loading-text="Loading..."
+            />
           </div>
         </el-card>
       </el-col>
       <!-- 分类数据统计 -->
       <el-col :span="8">
         <el-card>
+          <div class="e-title">分类数据统计</div>
           <div style="height:350px">
-            <div class="e-title">分类数据统计</div>
-            <div style="height:350px">
-              <v-chart
-                :options="category"
-                v-loading="loading"
-                element-loading-text="Loading..." />
-            </div>
+            <v-chart
+              :options="category"
+              v-loading="loading"
+              element-loading-text="Loading..."
+            />
           </div>
         </el-card>
       </el-col>
@@ -101,6 +113,7 @@ export default {
       messageCount: 0,
       userCount: 0,
       articleCount: 0,
+      articleStatisticsList: [],
       viewCount: {
         tooltip: {
           trigger: "axis",
@@ -201,27 +214,38 @@ export default {
   methods: {
     getData() {
       this.axios.get("/api/admin/").then(({ data }) => {
+        console.log(data.data);
         this.viewsCount = data.data.viewsCount;
         this.messageCount = data.data.messageCount;
         this.userCount = data.data.userCount;
         this.articleCount = data.data.articleCount;
+        this.articleStatisticsList = data.data.articleStatisticsList;
 
-        data.data.uniqueViewDTOList.forEach(item => {
-          this.viewCount.xAxis.data.push(item.day);
-          this.viewCount.series[0].data.push(item.viewCount);
-        });
-        data.data.categoryDTOList.forEach(item => {
-          this.category.series[0].data.push({
-            value: item.articleCount,
-            name: item.categoryName
+        if (data.data.uniqueViewList != null) {
+          data.data.uniqueViewList.forEach(item => {
+            this.viewCount.xAxis.data.push(item.day);
+            this.viewCount.series[0].data.push(item.viewCount);
           });
-          this.category.legend.data.push(item.categoryName);
-        });
-        data.data.articleRankDTOList.forEach(item => {
-          this.articleRank.series[0].data.push(item.viewsCount);
-          this.articleRank.xAxis.data.push(item.articleTitle);
-        });
+        }
+
+        if (data.data.categoryList != null) {
+          data.data.categoryList.forEach(item => {
+            this.category.series[0].data.push({
+              value: item.articleCount,
+              name: item.categoryName
+            });
+            this.category.legend.data.push(item.categoryName);
+          });
+        }
+
+        if (data.data.articleRankList != null) {
+          data.data.articleRankList.forEach(item => {
+            this.articleRank.series[0].data.push(item.viewsCount);
+            this.articleRank.xAxis.data.push(item.articleTitle);
+          });
+        }
       });
+      this.loading = false;
     }
   }
 };
@@ -260,5 +284,9 @@ export default {
   font-size: 13px;
   color: #202a34;
   font-weight: 700;
+}
+
+.vch__legend__wrapper >>> data-v-a9cfea66 {
+  color: #216e39;
 }
 </style>
