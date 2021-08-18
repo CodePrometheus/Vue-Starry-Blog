@@ -5,7 +5,8 @@
     </div>
     <mavon-editor
       v-model="aboutContent"
-      style="height:calc(100vh - 215px);margin-top: 2.25rem" />
+      style="height:calc(100vh - 215px);margin-top: 2.25rem"
+    />
     <el-button
       type="danger"
       size="medium"
@@ -34,21 +35,23 @@ export default {
       });
     },
     updateAbout() {
-      let param = new URLSearchParams();
-      param.append("aboutContent", this.aboutContent);
-      this.axios.put("/api/admin/about", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
-        }
-      });
+      this.axios
+        .put("/api/admin/about", {
+          aboutContent: this.aboutContent
+        })
+        .then(({ data }) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+        });
     }
   }
 };
