@@ -16,7 +16,7 @@
       <el-button
         type="danger"
         size="small"
-        icon="el-icon-deleteItem"
+        icon="el-icon-delete"
         :disabled="this.categoryIdList.length == 0"
         @click="isDelete = true"
       >
@@ -29,14 +29,14 @@
           size="small"
           placeholder="请输入分类名"
           style="width:200px"
-          @keyup.enter.native="listCategories"
+          @keyup.enter.native="searchCategories"
         />
         <el-button
           type="primary"
           size="small"
           icon="el-icon-search"
           style="margin-left:1rem"
-          @click="listCategories"
+          @click="searchCategories"
         >
           搜索
         </el-button>
@@ -54,6 +54,8 @@
       <el-table-column type="selection" width="55" />
       <!-- 分类名 -->
       <el-table-column prop="categoryName" label="分类名" align="center" />
+      <!-- 文章量 -->
+      <el-table-column prop="articleCount" label="文章量" align="center" />
       <!-- 分类创建时间 -->
       <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
@@ -145,6 +147,10 @@ export default {
     };
   },
   methods: {
+    searchCategories() {
+      this.current = 1;
+      this.listCategories();
+    },
     selectionChange(categoryList) {
       this.categoryIdList = [];
       categoryList.forEach(item => {

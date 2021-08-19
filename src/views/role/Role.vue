@@ -2,45 +2,46 @@
   <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openMenuModel(null)"
-      >
-        新增
-      </el-button>
-      <el-button
-        type="danger"
-        size="small"
-        icon="el-icon-deleteItem"
-        :disabled="this.roleIdList.length == 0"
-        @click="isDelete = true"
-      >
-        批量删除
-      </el-button>
+      <!-- 条件筛选 -->
       <div style="margin-left:auto">
+        <el-select
+          clearable
+          v-model="loginType"
+          placeholder="请选择登录方式"
+          size="small"
+          style="margin-right:1rem"
+        >
+          <el-option
+            v-for="v in typeList"
+            :key="v.type"
+            :label="v.desc"
+            :value="v.type"
+          />
+        </el-select>
         <el-input
           v-model="keywords"
           prefix-icon="el-icon-search"
-          placeholder="请输入角色名"
-          style="width:200px"
-          @keyup.enter.native="listRoles"
-        />
-        <el-button
-          type="primary"
           size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="listRoles"
+          placeholder="请输入昵称"
+          style="width:200px"
+          @keyup.enter.native="searchUsers"
         >
-          搜索
-        </el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-search"
+            style="margin-left:1rem"
+            @click="searchUsers"
+          >
+            搜索
+          </el-button>
+        </el-input>
       </div>
     </div>
+    <!-- 表格展示 -->
     <el-table
       border
-      :data="roleList"
+      :data="userList"
       @selection-change="selectionChange"
       v-loading="loading"
       element-loading-text="Loading..."

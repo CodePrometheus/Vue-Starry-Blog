@@ -14,7 +14,7 @@
       <el-button
         type="danger"
         size="small"
-        icon="el-icon-deleteItem"
+        icon="el-icon-delete"
         :disabled="tagIdList.length == 0"
         @click="isDelete = true"
       >
@@ -27,14 +27,14 @@
           size="small"
           placeholder="请输入标签名"
           style="width:200px"
-          @keyup.enter.native="listTags"
+          @keyup.enter.native="searchTags"
         />
         <el-button
           type="primary"
           size="small"
           icon="el-icon-search"
           style="margin-left:1rem"
-          @click="listTags"
+          @click="searchTags"
         >
           搜索
         </el-button>
@@ -58,6 +58,8 @@
           </el-tag>
         </template>
       </el-table-column>
+      <!-- 文章量 -->
+      <el-table-column prop="articleCount" label="文章量" align="center" />
       <!-- 标签创建时间 -->
       <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
@@ -154,6 +156,10 @@ export default {
       tagList.forEach(item => {
         this.tagIdList.push(item.id);
       });
+    },
+    searchTags() {
+      this.current = 1;
+      this.listTags();
     },
     sizeChange(size) {
       this.size = size;

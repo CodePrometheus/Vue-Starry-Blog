@@ -1,27 +1,41 @@
 <template>
   <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
-    <!-- 表格操作 -->
     <div class="operation-container">
       <!-- 条件筛选 -->
       <div style="margin-left:auto">
+        <el-select
+          clearable
+          v-model="loginType"
+          placeholder="请选择登录方式"
+          size="small"
+          style="margin-right:1rem"
+        >
+          <el-option
+            v-for="v in typeList"
+            :key="v.type"
+            :label="v.desc"
+            :value="v.type"
+          />
+        </el-select>
         <el-input
           v-model="keywords"
           prefix-icon="el-icon-search"
           size="small"
           placeholder="请输入昵称"
           style="width:200px"
-          @keyup.enter.native="listUsers"
-        />
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="listUsers"
+          @keyup.enter.native="searchUsers"
         >
-          搜索
-        </el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-search"
+            style="margin-left:1rem"
+            @click="searchUsers"
+          >
+            搜索
+          </el-button>
+        </el-input>
       </div>
     </div>
     <!-- 表格展示 -->
@@ -56,9 +70,9 @@
         width="80"
       >
         <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.loginType == 0">邮箱</el-tag>
-          <el-tag v-if="scope.row.loginType == 1">QQ</el-tag>
-          <el-tag type="danger" v-if="scope.row.loginType == 2">微博</el-tag>
+          <el-tag type="success" v-if="scope.row.loginType == 1">邮箱</el-tag>
+          <el-tag v-if="scope.row.loginType == 2">QQ</el-tag>
+          <el-tag type="danger" v-if="scope.row.loginType == 3">微博</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="roleList" label="用户角色" align="center">
@@ -187,6 +201,21 @@ export default {
         userInfoId: null,
         nickname: ""
       },
+      typeList: [
+        {
+          type: 1,
+          desc: "邮箱"
+        },
+        {
+          type: 2,
+          desc: "QQ"
+        },
+        {
+          type: 3,
+          desc: "微博"
+        }
+      ],
+      loginType: null,
       userRoleList: [],
       roleIdList: [],
       userList: [],
@@ -197,6 +226,10 @@ export default {
     };
   },
   methods: {
+    searchUsers() {
+      this.current = 1;
+      this.listUsers();
+    },
     selectionChange(userList) {
       this.userIdList = [];
       userList.forEach(item => {
@@ -212,9 +245,10 @@ export default {
       this.listUsers();
     },
     changeDisable(user) {
-      let param = new URLSearchParams();
-      param.append("isDisable", user.isDisable);
-      this.axios.put("/api/admin/users/disable/" + user.userInfoId, param);
+      this.axios.put("/api/admin/users/disable", {
+        id: user.userInfoId,
+        isDisable: user.isDisable
+      });
     },
     openEditModel(user) {
       this.roleIdList = [];
@@ -250,7 +284,8 @@ export default {
           params: {
             current: this.current,
             size: this.size,
-            keywords: this.keywords
+            keywords: this.keywords,
+            loginType: this.loginType
           }
         })
         .then(({ data }) => {
@@ -259,8 +294,15 @@ export default {
           this.loading = false;
         });
       this.axios.get("/api/admin/users/role").then(({ data }) => {
+        console.log(data.data);
         this.userRoleList = data.data;
       });
+    }
+  },
+  watch: {
+    loginType() {
+      this.current = 1;
+      this.listUsers();
     }
   }
 };
