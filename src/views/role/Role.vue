@@ -2,46 +2,48 @@
   <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-plus"
+        @click="openMenuModel(null)"
+      >
+        新增
+      </el-button>
+      <el-button
+        type="danger"
+        size="small"
+        icon="el-icon-delete"
+        :disabled="this.roleIdList.length == 0"
+        @click="isDelete = true"
+      >
+        批量删除
+      </el-button>
       <!-- 条件筛选 -->
       <div style="margin-left:auto">
-        <el-select
-          clearable
-          v-model="loginType"
-          placeholder="请选择登录方式"
-          size="small"
-          style="margin-right:1rem"
-        >
-          <el-option
-            v-for="v in typeList"
-            :key="v.type"
-            :label="v.desc"
-            :value="v.type"
-          />
-        </el-select>
         <el-input
           v-model="keywords"
           prefix-icon="el-icon-search"
           size="small"
-          placeholder="请输入昵称"
+          placeholder="请输入角色名"
           style="width:200px"
-          @keyup.enter.native="searchUsers"
+          @keyup.enter.native="searchRoles"
+        />
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          style="margin-left:1rem"
+          @click="searchRoles"
         >
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            style="margin-left:1rem"
-            @click="searchUsers"
-          >
-            搜索
-          </el-button>
-        </el-input>
+          搜索
+        </el-button>
       </div>
     </div>
     <!-- 表格展示 -->
     <el-table
       border
-      :data="userList"
+      :data="roleList"
       @selection-change="selectionChange"
       v-loading="loading"
       element-loading-text="Loading..."
@@ -115,7 +117,6 @@
       :page-sizes="[10, 20]"
       layout="total, sizes, prev, pager, next, jumper"
     />
-
     <!-- 弹框 -->
     <el-dialog :visible.sync="roleMenu" width="30%">
       <div class="dialog-title-container" slot="title" ref="roleTitle" />
@@ -149,13 +150,12 @@
       <div class="dialog-title-container" slot="title">修改资源权限</div>
       <el-form label-width="80px" size="medium" :model="roleForm">
         <el-form-item label="角色名">
-          <el-input v-model="roleForm.roleName" style="width: 250px" disabled />
+          <el-input v-model="roleForm.roleName" style="width:250px" />
         </el-form-item>
         <el-form-item label="权限标签">
           <el-input
             v-model="roleForm.roleLabel"
             style="width: 250px"
-            disabled
           />
         </el-form-item>
         <el-form-item label="资源权限">
@@ -216,6 +216,10 @@ export default {
     };
   },
   methods: {
+    searchRoles() {
+      this.current = 1;
+      this.listRoles();
+    },
     sizeChange(size) {
       this.size = size;
       this.listUsers();
