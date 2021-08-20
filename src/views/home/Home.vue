@@ -214,7 +214,6 @@ export default {
   methods: {
     getData() {
       this.axios.get("/api/admin/").then(({ data }) => {
-        console.log(data.data);
         this.viewsCount = data.data.viewsCount;
         this.messageCount = data.data.messageCount;
         this.userCount = data.data.userCount;

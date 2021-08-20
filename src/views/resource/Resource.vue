@@ -39,7 +39,7 @@
             :active-value="1"
             :inactive-value="0"
             @change="changeResource(scope.row)"
-          ></el-switch>
+          />
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" align="center">
@@ -77,12 +77,171 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 添加模块名 -->
+    <el-dialog :visible.sync="addModel" width="30%">
+      <div class="dialog-title-container" slot="title" ref="modelTitle" />
+      <el-form label-width="80px" size="medium" :model="resourceForm">
+        <el-form-item label="模块名">
+          <el-input v-model="resourceForm.resourceName" style="width:220px" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addModel = false">取 消</el-button>
+        <el-button type="primary" @click="addOrEditResource">
+          确 定
+        </el-button>
+      </span>
+    </el-dialog>
+    <!-- 新增模态框 -->
+    <el-dialog :visible.sync="addResource" width="30%">
+      <div class="dialog-title-container" slot="title" ref="resourceTitle" />
+      <el-form label-width="80px" size="medium" :model="resourceForm">
+        <el-form-item label="资源名">
+          <el-input v-model="resourceForm.resourceName" style="width:220px" />
+        </el-form-item>
+        <el-form-item label="资源路径">
+          <el-input v-model="resourceForm.url" style="width:220px" />
+        </el-form-item>
+        <el-form-item label="请求方式">
+          <el-radio-group v-model="resourceForm.requestMethod">
+            <el-radio :label="'GET'">GET</el-radio>
+            <el-radio :label="'POST'">POST</el-radio>
+            <el-radio :label="'PUT'">PUT</el-radio>
+            <el-radio :label="'DELETE'">DELETE</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addResource = false">取 消</el-button>
+        <el-button type="primary" @click="addOrEditResource">
+          确 定
+        </el-button>
+      </span>
+    </el-dialog>
   </el-card>
 </template>
 
 <script>
 export default {
-  name: "Resource"
+  created() {
+    this.listResources();
+  },
+  data() {
+    return {
+      loading: true,
+      resourceList: [],
+      addModel: false,
+      addResource: false,
+      resourceForm: {}
+    };
+  },
+  methods: {
+    selectionChange() {
+    },
+    openEditResourceModel(resource) {
+      if (resource.url == null) {
+        this.openModel(resource);
+        return false;
+      }
+      this.resourceForm = JSON.parse(JSON.stringify(resource));
+      this.$refs.resourceTitle.innerHTML = "修改资源";
+      this.addResource = true;
+    },
+    addOrEditResource() {
+      if (this.resourceForm.resourceName.trim() == "") {
+        this.$message.error("资源名不能为空");
+        return false;
+      }
+      this.axios
+        .post("/api/admin/resources", this.resourceForm)
+        .then(({ data }) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listResources();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.addModel = false;
+          this.addResource = false;
+        });
+    },
+    openAddResourceModel(resource) {
+      this.resourceForm = {};
+      this.resourceForm.parentId = resource.id;
+      this.$refs.resourceTitle.innerHTML = "添加资源";
+      this.addResource = true;
+    },
+    deleteResource(id) {
+      this.axios.delete("/api/admin/resources/" + id).then(({ data }) => {
+        if (data.flag) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+          this.listResources();
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
+      });
+    },
+    changeResource(resource) {
+      this.axios.post("/api/admin/resources", resource).then(({ data }) => {
+        if (data.flag) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+          this.listResources();
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
+      });
+    },
+    listResources() {
+      this.axios.get("/api/admin/resources").then(({ data }) => {
+        this.resourceList = data.data;
+        this.loading = false;
+      });
+    },
+    openModel(resource) {
+      if (resource != null) {
+        this.resourceForm = JSON.parse(JSON.stringify(resource));
+        this.$refs.modelTitle.innerHTML = "修改模块";
+      } else {
+        this.resourceForm = {};
+        this.$refs.modelTitle.innerHTML = "添加模块";
+      }
+      this.addModel = true;
+    }
+  },
+  computed: {
+    tagType() {
+      return function(type) {
+        switch (type) {
+          case "GET":
+            return "";
+          case "POST":
+            return "success";
+          case "PUT":
+            return "warning";
+          case "DELETE":
+            return "danger";
+        }
+      };
+    }
+  }
 };
 </script>
 
