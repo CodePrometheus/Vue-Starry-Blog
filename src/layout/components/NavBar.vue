@@ -88,7 +88,7 @@ export default {
       this.$store.commit("removeTab", tab);
       //如果删除的是当前页则返回上一标签页
       if (tab.path == this.$route.path) {
-        var tabList = this.$store.state.tabList;
+        let tabList = this.$store.state.tabList;
         this.$router.push({ path: tabList[tabList.length - 1].path });
       }
     },

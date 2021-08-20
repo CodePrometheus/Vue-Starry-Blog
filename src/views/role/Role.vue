@@ -49,15 +49,15 @@
       element-loading-text="Loading..."
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="roleName" lable="角色名" align="center" />
-      <el-table-column prop="roleLabel" lable="权限标签" align="center">
+      <el-table-column prop="roleName" label="角色名" align="center" />
+      <el-table-column prop="roleLabel" label="权限标签" align="center">
         <template slot-scope="scope">
           <el-tag>
             {{ scope.row.roleLabel }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="isDisable" lable="禁用" align="center" width="100">
+      <el-table-column prop="isDisable" label="禁用" align="center" width="100">
         <template slot-scope="scope">
           <!-- 动态显示开关 -->
           <el-switch
@@ -72,7 +72,7 @@
       </el-table-column>
       <el-table-column
         prop="createTime"
-        lable="创建时间"
+        label="创建时间"
         width="150"
         align="center"
       >
@@ -81,10 +81,10 @@
           {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
-      <el-table-column lable="操作" align="center" width="200">
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="openMenuModel(scope.row)">
-            <i class="el-icon-edit" /> 修改
+            <i class="el-icon-edit" /> 菜单权限
           </el-button>
           <el-button
             type="text"
@@ -153,10 +153,7 @@
           <el-input v-model="roleForm.roleName" style="width:250px" />
         </el-form-item>
         <el-form-item label="权限标签">
-          <el-input
-            v-model="roleForm.roleLabel"
-            style="width: 250px"
-          />
+          <el-input v-model="roleForm.roleLabel" style="width: 250px" />
         </el-form-item>
         <el-form-item label="资源权限">
           <el-tree
@@ -193,6 +190,9 @@
 
 <script>
 export default {
+  created() {
+    this.listRoles();
+  },
   data: function() {
     return {
       loading: true,
@@ -216,6 +216,26 @@ export default {
     };
   },
   methods: {
+    changeDisable(role) {
+      this.axios
+        .put("/api/admin/role/disable", {
+          id: role.id,
+          isDisable: role.isDisable
+        })
+        .then(({ data }) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+        });
+    },
     searchRoles() {
       this.current = 1;
       this.listRoles();
@@ -244,16 +264,18 @@ export default {
           }
         })
         .then(({ data }) => {
+          console.log(data.data);
           this.roleList = data.data.recordList;
           this.current = data.data.count;
           this.loading = false;
         });
-      this.axios.get("/api/admin/role/menus").then(({ data }) => {
-        this.menuList = data.data;
-      });
       this.axios.get("/api/admin/role/resources").then(({ data }) => {
         this.resourceList = data.data;
       });
+      this.axios.get("/api/admin/role/menus").then(({ data }) => {
+        this.menuList = data.data;
+      });
+      this.listRoles();
     },
     deleteRoles(id) {
       let param = {};

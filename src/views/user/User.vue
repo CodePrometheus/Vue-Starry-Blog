@@ -25,17 +25,16 @@
           placeholder="请输入昵称"
           style="width:200px"
           @keyup.enter.native="searchUsers"
+        />
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          style="margin-left:1rem"
+          @click="searchUsers"
         >
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            style="margin-left:1rem"
-            @click="searchUsers"
-          >
-            搜索
-          </el-button>
-        </el-input>
+          搜索
+        </el-button>
       </div>
     </div>
     <!-- 表格展示 -->
@@ -245,7 +244,7 @@ export default {
       this.listUsers();
     },
     changeDisable(user) {
-      this.axios.put("/api/admin/users/disable", {
+      this.axios.put("/api/admin/user/disable", {
         id: user.userInfoId,
         isDisable: user.isDisable
       });
@@ -294,7 +293,6 @@ export default {
           this.loading = false;
         });
       this.axios.get("/api/admin/users/role").then(({ data }) => {
-        console.log(data.data);
         this.userRoleList = data.data;
       });
     }
