@@ -41,7 +41,6 @@
     <el-table
       border
       :data="userList"
-      @selection-change="selectionChange"
       v-loading="loading"
       element-loading-text="Loading..."
     >
@@ -229,12 +228,6 @@ export default {
       this.current = 1;
       this.listUsers();
     },
-    selectionChange(userList) {
-      this.userIdList = [];
-      userList.forEach(item => {
-        this.userIdList.push(item.userInfoId);
-      });
-    },
     sizeChange(size) {
       this.size = size;
       this.listUsers();
@@ -244,10 +237,25 @@ export default {
       this.listUsers();
     },
     changeDisable(user) {
-      this.axios.put("/api/admin/user/disable", {
-        id: user.userInfoId,
-        isDisable: user.isDisable
-      });
+      this.axios
+        .put("/api/admin/user/disable", {
+          id: user.userInfoId,
+          isDisable: user.isDisable
+        })
+        .then(({ data }) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listUsers();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+        });
     },
     openEditModel(user) {
       this.roleIdList = [];

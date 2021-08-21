@@ -25,7 +25,7 @@
     </div>
     <el-table
       v-loading="loading"
-
+      element-loading-text="Loading..."
       :data="userList"
     >
       <el-table-column type="selection" width="55" align="center" />
@@ -36,12 +36,17 @@
       </el-table-column>
       <el-table-column prop="nickname" label="昵称" align="center" />
       <el-table-column prop="ipAddr" label="ip地址" align="center" />
-      <el-table-column prop="ipSource" label="登录地址" align="center" />
+      <el-table-column
+        prop="ipSource"
+        label="登录地址"
+        align="center"
+        width="200"
+      />
       <el-table-column
         prop="browser"
         label="浏览器"
         align="center"
-        width="200"
+        width="160"
       />
       <el-table-column prop="os" label="操作系统" align="center" />
       <el-table-column
@@ -85,7 +90,7 @@
 
 <script>
 export default {
-  create() {
+  created() {
     this.listOnlineUsers();
   },
   data() {
@@ -96,10 +101,25 @@ export default {
       current: 1,
       size: 10,
       count: 0,
-      isCheck: false
+      isCheck: false,
+      optLog: {}
     };
   },
   methods: {
+    searchOnlineUser() {
+      this.axios
+        .get("/api/admin/user/online/search", {
+          params: {
+            current: this.current,
+            size: this.size,
+            keywords: this.keywords
+          }
+        })
+        .then(({ data }) => {
+          this.userList = data.data.recordList;
+          this.count = data.data.count;
+        });
+    },
     sizeChange(size) {
       this.size = size;
       this.listOnlineUsers();
@@ -123,6 +143,7 @@ export default {
         });
     },
     removeOnlineUser(user) {
+      console.log(user);
       this.axios
         .delete("/api/admin/user/online/" + user.userInfoId)
         .then(({ data }) => {
