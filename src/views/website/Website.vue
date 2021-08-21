@@ -108,6 +108,14 @@
               />
               <el-checkbox label="Gitee">是否展示</el-checkbox>
             </el-form-item>
+            <el-form-item label="BiliBili">
+              <el-input
+                v-model="websiteConfigForm.bilibili"
+                size="small"
+                style="width:400px;margin-right:1rem"
+              />
+              <el-checkbox label="bilibili">是否展示</el-checkbox>
+            </el-form-item>
             <el-button
               type="primary"
               size="medium"
@@ -260,6 +268,7 @@ export default {
         qq: "",
         github: "",
         gitee: "",
+        bilibili: "",
         touristAvatar: "",
         isReward: 1,
         weiXinQRCode: "",
