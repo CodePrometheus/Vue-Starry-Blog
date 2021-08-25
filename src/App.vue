@@ -12,6 +12,7 @@ export default {
     if (this.$store.state.userId != null) {
       generateMenu();
     }
+    this.axios.post("/api/report");
   }
 };
 </script>

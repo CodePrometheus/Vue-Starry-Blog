@@ -13,6 +13,7 @@ import ECharts from "vue-echarts";
 import "echarts/lib/chart/line";
 import "echarts/lib/chart/pie";
 import "echarts/lib/chart/bar";
+import "echarts/lib/chart/map";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
@@ -22,6 +23,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import VueCalendarHeatmap from "vue-calendar-heatmap";
 import dayjs from "dayjs";
+import tagCloud from "../src/assets/js/tag-cloud";
 
 Vue.prototype.config = config;
 Vue.use(mavonEditor);
@@ -29,6 +31,7 @@ Vue.component("v-chart", ECharts);
 Vue.use(VueAxios, axios);
 Vue.use(ElementUI);
 Vue.use(VueCalendarHeatmap);
+Vue.use(tagCloud);
 Vue.config.productionTip = false;
 Vue.prototype.$moment = dayjs;
 
