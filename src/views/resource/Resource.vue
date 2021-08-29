@@ -10,6 +10,25 @@
       >
         新增模块
       </el-button>
+      <div style="margin-left:auto">
+        <el-input
+          v-model="keywords"
+          prefix-icon="el-icon-search"
+          size="small"
+          placeholder="请输入用户昵称"
+          style="width:200px"
+          @keyup.enter.native="listResources"
+        />
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          style="margin-left:1rem"
+          @click="listResources"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <!-- 权限列表 -->
     <el-table
@@ -131,7 +150,8 @@ export default {
       resourceList: [],
       addModel: false,
       addResource: false,
-      resourceForm: {}
+      resourceForm: {},
+      keywords: ""
     };
   },
   methods: {
@@ -207,10 +227,16 @@ export default {
       });
     },
     listResources() {
-      this.axios.get("/api/admin/resources").then(({ data }) => {
-        this.resourceList = data.data;
-        this.loading = false;
-      });
+      this.axios
+        .get("/api/admin/resources", {
+          params: {
+            keywords: this.keywords
+          }
+        })
+        .then(({ data }) => {
+          this.resourceList = data.data;
+          this.loading = false;
+        });
     },
     openModel(resource) {
       if (resource != null) {

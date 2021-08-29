@@ -10,6 +10,25 @@
       >
         新增菜单
       </el-button>
+      <div style="margin-left:auto">
+        <el-input
+          v-model="keywords"
+          prefix-icon="el-icon-search"
+          size="small"
+          placeholder="请输入用户昵称"
+          style="width:200px"
+          @keyup.enter.native="listMenu"
+        />
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-search"
+          style="margin-left:1rem"
+          @click="listMenu"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <el-table
       v-loading="loading"
