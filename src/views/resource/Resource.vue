@@ -15,7 +15,7 @@
           v-model="keywords"
           prefix-icon="el-icon-search"
           size="small"
-          placeholder="请输入用户昵称"
+          placeholder="请输入资源名"
           style="width:200px"
           @keyup.enter.native="listResources"
         />

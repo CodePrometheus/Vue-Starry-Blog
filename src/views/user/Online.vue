@@ -95,9 +95,9 @@ export default {
   },
   data() {
     return {
+      keywords: null,
       loading: true,
       userList: [],
-      keywords: null,
       current: 1,
       size: 10,
       count: 0,
@@ -106,20 +106,6 @@ export default {
     };
   },
   methods: {
-    searchOnlineUser() {
-      this.axios
-        .get("/api/admin/user/online/search", {
-          params: {
-            current: this.current,
-            size: this.size,
-            keywords: this.keywords
-          }
-        })
-        .then(({ data }) => {
-          this.userList = data.data.recordList;
-          this.count = data.data.count;
-        });
-    },
     sizeChange(size) {
       this.size = size;
       this.listOnlineUsers();
@@ -133,7 +119,8 @@ export default {
         .get("/api/admin/user/online", {
           params: {
             current: this.current,
-            size: this.size
+            size: this.size,
+            keywords: this.keywords
           }
         })
         .then(({ data }) => {
