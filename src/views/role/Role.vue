@@ -264,7 +264,6 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data.data);
           this.roleList = data.data.recordList;
           this.current = data.data.count;
           this.loading = false;

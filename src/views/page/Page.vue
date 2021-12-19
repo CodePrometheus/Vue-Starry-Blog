@@ -128,7 +128,6 @@ export default {
   methods: {
     pageModel(v) {
       if (v) {
-        console.log(v);
         this.pageForum = JSON.parse(v);
         this.$refs.pageTitle.innerHTML = "修改页面";
       } else {

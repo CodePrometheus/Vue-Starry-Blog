@@ -4,6 +4,8 @@
       {{ this.$route.name }}
     </div>
     <mavon-editor
+      ref="md"
+      @imgadd="uploadImg"
       v-model="aboutContent"
       style="height:calc(100vh - 215px);margin-top: 2.25rem"
     />
@@ -19,6 +21,8 @@
 </template>
 
 <script>
+import * as imageConversion from "image-conversion";
+
 export default {
   created() {
     this.getAbout();
@@ -52,6 +56,30 @@ export default {
             });
           }
         });
+    },
+    uploadImg(pos, file) {
+      let data = new FormData();
+      if (file.size / 1024 < this.config.UPLOAD_SIZE) {
+        data.append("file", file);
+        this.axios.post("/api/admin/articles/images", data).then(({ data }) => {
+          this.$refs.md.$img2Url(pos, data.data);
+        });
+      } else {
+        // 压缩图片
+        imageConversion
+          .compressAccurately(file, this.config.UPLOAD_SIZE)
+          .then(res => {
+            data.append(
+              "file",
+              new window.File([res], file.name, { type: file.type })
+            );
+            this.axios
+              .post("/api/admin/articles/images", data)
+              .then(({ data }) => {
+                this.$refs.md.$img2Url(pos, data.data);
+              });
+          });
+      }
     }
   }
 };

@@ -130,7 +130,6 @@ export default {
         });
     },
     removeOnlineUser(user) {
-      console.log(user);
       this.axios
         .delete("/api/admin/user/online/" + user.userInfoId)
         .then(({ data }) => {

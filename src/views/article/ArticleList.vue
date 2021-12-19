@@ -26,7 +26,7 @@
         v-if="isDelete == 0"
         type="danger"
         size="small"
-        icon="el-icon-deleteItem"
+        icon="el-icon-delete"
         :disabled="articleIdList.length == 0"
         @click="updateIsDelete = true"
       >
@@ -36,7 +36,7 @@
         v-else
         type="danger"
         size="small"
-        icon="el-icon-deleteItem"
+        icon="el-icon-delete"
         :disabled="articleIdList.length == 0"
         @click="remove = true"
       >
@@ -246,9 +246,9 @@
             编辑
           </el-button>
           <el-popconfirm
-            title="确定删除吗？"
+            title="确定放入回收站吗？"
             style="margin-left:10px"
-            @onConfirm="updateArticleDelete(scope.row.id)"
+            @confirm="updateArticleDelete(scope.row.id)"
             v-if="scope.row.isDelete == 0"
           >
             <el-button size="mini" type="danger" slot="reference">
@@ -258,7 +258,7 @@
           <el-popconfirm
             title="确定恢复吗？"
             v-if="scope.row.isDelete == 1"
-            @onConfirm="updateArticleDelete(scope.row.id)"
+            @confirm="updateArticleDelete(scope.row.id)"
           >
             <el-button size="mini" type="success" slot="reference">
               恢复
@@ -268,7 +268,7 @@
             style="margin-left:10px"
             v-if="scope.row.isDelete == 1"
             title="确定彻底删除吗？"
-            @onConfirm="deleteArticles(scope.row.id)"
+            @@confirm="deleteArticles(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
@@ -294,7 +294,7 @@
       <div class="dialog-title-container" slot="title">
         <i class="el-icon-warning" style="color:#ff9900" />提示
       </div>
-      <div style="font-size:1rem">是否删除选中项？</div>
+      <div style="font-size:1rem">是否将选中项放入回收站？</div>
       <div slot="footer">
         <el-button @click="updateIsDelete = false">取 消</el-button>
         <el-button type="primary" @click="updateArticleDelete(null)">
@@ -356,7 +356,8 @@ export default {
       isDelete: 0,
       current: 1,
       size: 10,
-      count: 0
+      count: 0,
+      status: null
     };
   },
   methods: {
@@ -500,7 +501,6 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data.data);
           this.articleList = data.data.recordList;
           this.count = data.data.count;
           this.loading = false;

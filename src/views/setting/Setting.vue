@@ -75,19 +75,6 @@
           </el-button>
         </el-form>
       </el-tab-pane>
-      <!-- 网站公告 -->
-      <el-tab-pane label="修改公告" name="notice">
-        <el-input
-          v-model="notice"
-          placeholder="请输入公告内容"
-          style="margin-bottom:1rem"
-          type="textarea"
-          :rows="5"
-        />
-        <el-button type="danger" size="medium" @click="updateNotice">
-          修改
-        </el-button>
-      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -106,7 +93,6 @@ export default {
         newPassword: "",
         confirmPassword: ""
       },
-      notice: "",
       activeName: "info"
     };
   },
@@ -161,6 +147,9 @@ export default {
         .put("/api/admin/users/password", this.passwordForm)
         .then(({ data }) => {
           if (data.flag) {
+            this.passwordForm.oldPassword = "";
+            this.passwordForm.newPassword = "";
+            this.passwordForm.confirmPassword = "";
             this.$message.success(data.message);
           } else {
             this.$message.error(data.message);
@@ -195,10 +184,12 @@ export default {
 .avatar-container {
   text-align: center;
 }
+
 .el-icon-message-solid {
   color: #f56c6c;
   margin-right: 0.3rem;
 }
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -206,9 +197,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409eff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -217,11 +210,13 @@ export default {
   line-height: 120px;
   text-align: center;
 }
+
 .avatar {
   width: 120px;
   height: 120px;
   display: block;
 }
+
 .info-container {
   display: flex;
   align-items: center;

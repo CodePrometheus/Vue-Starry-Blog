@@ -246,7 +246,6 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data.data.recordList);
           this.logList = data.data.recordList;
           this.count = data.data.count;
           this.loading = false;

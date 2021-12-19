@@ -316,7 +316,6 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data.data);
           this.commentList = data.data.recordList;
           this.count = data.data.count;
           this.loading = false;

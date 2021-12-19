@@ -69,6 +69,12 @@
               style="width:400px"
             />
           </el-form-item>
+          <el-form-item label="第三方登录">
+            <el-checkbox-group v-model="websiteConfigForm.socialLoginList">
+              <el-checkbox label="qq">QQ</el-checkbox>
+              <el-checkbox label="weibo">微博</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
           <el-button
             type="primary"
             size="medium"
@@ -79,7 +85,7 @@
           </el-button>
         </el-form>
       </el-tab-pane>
-      <!-- 网站公告 -->
+      <!-- 社交信息 -->
       <el-tab-pane label="社交信息" name="notice">
         <el-form label-width="70px" :model="websiteConfigForm">
           <!-- 多选框 -->
@@ -100,14 +106,6 @@
               />
               <el-checkbox label="Github">是否展示</el-checkbox>
             </el-form-item>
-            <el-form-item label="Gitee">
-              <el-input
-                v-model="websiteConfigForm.gitee"
-                size="small"
-                style="width:400px;margin-right:1rem"
-              />
-              <el-checkbox label="Gitee">是否展示</el-checkbox>
-            </el-form-item>
             <el-form-item label="BiliBili">
               <el-input
                 v-model="websiteConfigForm.bilibili"
@@ -127,28 +125,49 @@
           </el-checkbox-group>
         </el-form>
       </el-tab-pane>
-      <!-- 修改密码 -->
+      <!-- 网站设置 -->
       <el-tab-pane label="网站设置" name="password">
         <el-form
           label-width="120px"
           :model="websiteConfigForm"
           label-position="left"
         >
-          <el-form-item label="游客头像">
-            <el-upload
-              class="avatar-uploader"
-              action="/api/admin/page/images"
-              :show-file-list="false"
-              :on-success="handleTouristAvatarSuccess"
-            >
-              <img
-                v-if="websiteConfigForm.touristAvatar"
-                :src="websiteConfigForm.touristAvatar"
-                class="avatar"
-              />
-              <i v-else class="el-icon-plus avatar-uploader-icon" />
-            </el-upload>
-          </el-form-item>
+          <el-row style="width: 600px;">
+            <el-col :md="12">
+              <el-form-item label="用户头像">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/admin/page/images"
+                  :show-file-list="false"
+                  :on-success="handleUserAvatarSuccess"
+                >
+                  <img
+                    v-if="websiteConfigForm.userAvatar"
+                    :src="websiteConfigForm.userAvatar"
+                    class="avatar"
+                  />
+                  <i v-else class="el-icon-plus avatar-uploader-icon" />
+                </el-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :md="12">
+              <el-form-item label="游客头像">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/admin/page/images"
+                  :show-file-list="false"
+                  :on-success="handleTouristAvatarSuccess"
+                >
+                  <img
+                    v-if="websiteConfigForm.touristAvatar"
+                    :src="websiteConfigForm.touristAvatar"
+                    class="avatar"
+                  />
+                  <i v-else class="el-icon-plus avatar-uploader-icon" />
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item label="邮箱通知">
             <el-radio-group v-model="websiteConfigForm.isEmailNotice">
               <el-radio :label="0">关闭</el-radio>
@@ -253,7 +272,7 @@ export default {
   created() {
     this.getWebsiteConfig();
   },
-  data() {
+  data: function() {
     return {
       websiteConfigForm: {
         websiteAvatar: "",
@@ -267,18 +286,18 @@ export default {
         socialUrlList: [],
         qq: "",
         github: "",
-        gitee: "",
         bilibili: "",
+        userAvatar: "",
         touristAvatar: "",
-        isReward: 1,
         weiXinQRCode: "",
         alipayQRCode: "",
         isChatRoom: 1,
         websocketUrl: "",
-        isLive2D: 1,
         isEmailNotice: 1,
         isCommentReview: 0,
-        isMessageReview: 0
+        isMessageReview: 0,
+        isLive2D: 1,
+        isReward: 1
       },
       activeName: "info"
     };
@@ -286,7 +305,6 @@ export default {
   methods: {
     getWebsiteConfig() {
       this.axios.get("/api/admin/website/config").then(({ data }) => {
-        console.log(data.data);
         this.websiteConfigForm = data.data;
       });
     },
@@ -314,6 +332,9 @@ export default {
     handleTouristAvatarSuccess(response) {
       this.websiteConfigForm.touristAvatar = response.data;
     },
+    handleUserAvatarSuccess(response) {
+      this.websiteConfigForm.userAvatar = response.data;
+    },
     handleWeiXinSuccess(response) {
       this.websiteConfigForm.weiXinQRCode = response.data;
     },
@@ -332,9 +353,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409eff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -343,6 +366,7 @@ export default {
   line-height: 120px;
   text-align: center;
 }
+
 .avatar {
   width: 120px;
   height: 120px;
