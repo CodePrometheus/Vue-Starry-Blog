@@ -267,7 +267,7 @@ export default {
       });
     },
     deleteMenu(id) {
-      this.axios.delete("/api/admin/menus" + id).then(({ data }) => {
+      this.axios.delete("/api/admin/menus/" + id).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
             title: "成功",

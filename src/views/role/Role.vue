@@ -117,7 +117,7 @@
       :page-sizes="[10, 20]"
       layout="total, sizes, prev, pager, next, jumper"
     />
-    <!-- 弹框 -->
+    <!-- 菜单弹框 -->
     <el-dialog :visible.sync="roleMenu" width="30%">
       <div class="dialog-title-container" slot="title" ref="roleTitle" />
       <el-form label-width="80px" size="medium" :model="roleForm">
@@ -193,7 +193,7 @@ export default {
   created() {
     this.listRoles();
   },
-  data: function() {
+  data() {
     return {
       loading: true,
       isDelete: false,
@@ -242,11 +242,11 @@ export default {
     },
     sizeChange(size) {
       this.size = size;
-      this.listUsers();
+      this.listRoles();
     },
     currentChange(current) {
       this.current = current;
-      this.listUsers();
+      this.listRoles();
     },
     selectionChange(roleList) {
       this.roleIdList = [];
@@ -274,7 +274,6 @@ export default {
       this.axios.get("/api/admin/role/menus").then(({ data }) => {
         this.menuList = data.data;
       });
-      this.listRoles();
     },
     deleteRoles(id) {
       let param = {};
