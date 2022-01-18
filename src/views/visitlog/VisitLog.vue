@@ -47,8 +47,10 @@
         width="200"
       >
         <template slot-scope="scope">
-          <div v-if="scope.row.nickname == null">神秘人</div>
-          <div v-else>{{ scope.row.nickname }}</div>
+          <span v-if="scope.row.nickname">
+            {{ scope.row.nickname }}
+          </span>
+          <span v-else>神秘人</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -58,8 +60,10 @@
         width="130"
       >
         <template slot-scope="scope">
-          <div v-if="scope.row.visitDesc == null">神秘内容</div>
-          <div v-else>{{ scope.row.visitDesc }}</div>
+          <span v-if="scope.row.visitDesc">
+            {{ scope.row.visitDesc }}
+          </span>
+          <span v-else>神秘内容</span>
         </template>
       </el-table-column>
       <el-table-column

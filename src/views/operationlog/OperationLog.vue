@@ -45,12 +45,6 @@
         width="120"
       />
       <el-table-column
-        width="100"
-        prop="optType"
-        label="操作类型"
-        align="center"
-      />
-      <el-table-column
         prop="optDesc"
         label="操作描述"
         align="center"
@@ -102,17 +96,17 @@
           >
             <i class="el-icon-view" /> 查看
           </el-button>
+          <el-popconfirm
+            title="确定删除吗？"
+            style="margin-left:10px"
+            @confirm="deleteLog(scope.row.id)"
+          >
+            <el-button size="mini" type="text" slot="reference">
+              <i class="el-icon-delete" /> 删除
+            </el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
-      <el-popconfirm
-        title="确定删除吗？"
-        style="margin-left:10px"
-        @confirm="deleteLog(scope.row.id)"
-      >
-        <el-button size="mini" type="text" slot="reference">
-          <i class="el-icon-delete" /> 删除
-        </el-button>
-      </el-popconfirm>
     </el-table>
     <el-pagination
       class="pagination-container"

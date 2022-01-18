@@ -10,6 +10,12 @@ const routes = [
     hidden: true,
     component: () => import("../views/login/Login.vue")
   }
+  // {
+  //   path: "*",
+  //   name: "404",
+  //   hidden: true,
+  //   component: () => import("../views/exception/404.vue")
+  // }
 ];
 
 const createRouter = () =>
