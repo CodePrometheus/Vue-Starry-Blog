@@ -36,6 +36,7 @@
               size="small"
               v-model="loginForm.password"
               prefix-icon="iconfont el-icon-mymima"
+              def
               show-password
               placeholder="密码"
               @keyup.enter.native="login"
@@ -61,8 +62,8 @@ export default {
   data: function() {
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: "2413245708@qq.com",
+        password: "163test"
       },
       loginRules: {
         username: [

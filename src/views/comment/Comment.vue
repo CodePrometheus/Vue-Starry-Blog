@@ -170,7 +170,7 @@
           <el-popconfirm
             style="margin-left:10px"
             title="确定删除吗？"
-            @onConfirm="deleteComments(scope.row.id)"
+            @confirm="deleteComments(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
@@ -290,6 +290,7 @@ export default {
       }
       this.axios.delete("/api/admin/comments", param).then(({ data }) => {
         if (data.flag) {
+          console.log("deleteComments: ", param);
           this.$notify.success({
             title: "成功",
             message: data.message
