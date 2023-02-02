@@ -1,89 +1,89 @@
 <template>
-  <el-card class="main-card">
-    <div class="title">{{ this.$route.name }}</div>
-    <div class="operation-container">
+  <el-card class='main-card'>
+    <div class='title'>{{ this.$route.name }}</div>
+    <div class='operation-container'>
       <!-- 数据筛选 -->
-      <div style="margin-left: auto">
+      <div style='margin-left: auto'>
         <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入用户昵称"
-          style="width:200px"
-          @keyup.enter.native="listOnlineUsers"
+          v-model='keywords'
+          prefix-icon='el-icon-search'
+          size='small'
+          placeholder='请输入用户昵称'
+          style='width:200px'
+          @keyup.enter.native='listOnlineUsers'
         />
         <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="listOnlineUsers"
+          type='primary'
+          size='small'
+          icon='el-icon-search'
+          style='margin-left:1rem'
+          @click='listOnlineUsers'
         >
           搜索
         </el-button>
       </div>
     </div>
     <el-table
-      v-loading="loading"
-      element-loading-text="Loading..."
-      :data="userList"
+      v-loading='loading'
+      element-loading-text='Loading...'
+      :data='userList'
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="avatar" width="100" label="头像" align="center">
-        <template slot-scope="scope">
-          <img :src="scope.row.avatar" width="40" height="40" />
+      <el-table-column type='selection' width='55' align='center' />
+      <el-table-column prop='avatar' width='100' label='头像' align='center'>
+        <template slot-scope='scope'>
+          <img :src='scope.row.avatar' width='40' height='40' />
         </template>
       </el-table-column>
-      <el-table-column prop="nickname" label="昵称" align="center" />
-      <el-table-column prop="ipAddr" label="ip地址" align="center" />
+      <el-table-column prop='nickname' label='昵称' align='center' />
+      <el-table-column prop='ipAddr' label='ip地址' align='center' />
       <el-table-column
-        prop="ipSource"
-        label="登录地址"
-        align="center"
-        width="200"
+        prop='ipSource'
+        label='登录地址'
+        align='center'
+        width='200'
       />
       <el-table-column
-        prop="browser"
-        label="浏览器"
-        align="center"
-        width="160"
+        prop='browser'
+        label='浏览器'
+        align='center'
+        width='160'
       />
-      <el-table-column prop="os" label="操作系统" align="center" />
+      <el-table-column prop='os' label='操作系统' align='center' />
       <el-table-column
-        prop="lastLoginTime"
-        label="登录时间"
-        align="center"
-        width="200"
+        prop='lastLoginTime'
+        label='登录时间'
+        align='center'
+        width='200'
       >
-        <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
+        <template slot-scope='scope'>
+          <i class='el-icon-time' style='margin-right:5px' />
           {{ scope.row.lastLoginTime | date }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="150">
-        <template slot-scope="scope">
+      <el-table-column label='操作' align='center' width='150'>
+        <template slot-scope='scope'>
           <el-popconfirm
-            title="确定下线吗 ?"
-            style="margin-left:10px"
-            @onConfirm="removeOnlineUser(scope.row)"
+            title='确定下线吗 ?'
+            style='margin-left:10px'
+            @onConfirm='removeOnlineUser(scope.row)'
           >
-            <el-button size="mini" type="text" slot="reference">
-              <i class="el-icon-delete" /> 下线
+            <el-button size='mini' type='text' slot='reference'>
+              <i class='el-icon-delete' /> 下线
             </el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      class="pagination-container"
+      class='pagination-container'
       background
-      @size-change="sizeChange"
-      @current-change="currentChange"
-      :current-page="current"
-      :page-size="size"
-      :total="count"
-      :page-sizes="[10, 20]"
-      layout="total, sizes, prev, pager, next, jumper"
+      @size-change='sizeChange'
+      @current-change='currentChange'
+      :current-page='current'
+      :page-size='size'
+      :total='count'
+      :page-sizes='[10, 20]'
+      layout='total, sizes, prev, pager, next, jumper'
     />
   </el-card>
 </template>
@@ -91,7 +91,7 @@
 <script>
 export default {
   created() {
-    this.listOnlineUsers();
+    this.listOnlineUsers()
   },
   data() {
     return {
@@ -103,20 +103,20 @@ export default {
       count: 0,
       isCheck: false,
       optLog: {}
-    };
+    }
   },
   methods: {
     sizeChange(size) {
-      this.size = size;
-      this.listOnlineUsers();
+      this.size = size
+      this.listOnlineUsers()
     },
     currentChange(current) {
-      this.current = current;
-      this.listOnlineUsers();
+      this.current = current
+      this.listOnlineUsers()
     },
     listOnlineUsers() {
       this.axios
-        .get("/api/admin/user/online", {
+        .get('/api/admin/user/online', {
           params: {
             current: this.current,
             size: this.size,
@@ -124,31 +124,31 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.userList = data.data.recordList;
-          this.count = data.data.count;
-          this.loading = false;
-        });
+          this.userList = data.data.recordList
+          this.count = data.data.count
+          this.loading = false
+        })
     },
     removeOnlineUser(user) {
       this.axios
-        .delete("/api/admin/user/online/" + user.userInfoId)
+        .delete('/api/admin/user/online/' + user.userInfoId)
         .then(({ data }) => {
           if (data.flag) {
             this.$notify.success({
-              title: "成功",
+              title: '成功',
               message: data.message
-            });
-            this.listOnlineUsers();
+            })
+            this.listOnlineUsers()
           } else {
             this.$notify.error({
-              title: "失败",
+              title: '失败',
               message: data.message
-            });
+            })
           }
-        });
+        })
     }
   }
-};
+}
 </script>
 
 <style scoped></style>

@@ -1,14 +1,14 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "/login",
-    name: "登录",
+    path: '/login',
+    name: '登录',
     hidden: true,
-    component: () => import("../views/login/Login.vue")
+    component: () => import('../views/login/Login.vue')
   }
   // {
   //   path: "*",
@@ -16,19 +16,19 @@ const routes = [
   //   hidden: true,
   //   component: () => import("../views/exception/404.vue")
   // }
-];
+]
 
 const createRouter = () =>
   new VueRouter({
-    mode: "history",
+    mode: 'history',
     routes: routes
-  });
+  })
 
-const router = createRouter();
+const router = createRouter()
 
 export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher;
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher
 }
 
-export default router;
+export default router

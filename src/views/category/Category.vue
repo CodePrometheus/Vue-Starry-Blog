@@ -1,42 +1,42 @@
 <template>
-  <el-card class="main-card">
-    <div class="title">
+  <el-card class='main-card'>
+    <div class='title'>
       {{ this.$route.name }}
     </div>
     <!-- 表格操作 -->
-    <div class="operation-container">
+    <div class='operation-container'>
       <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openModel(null)"
+        type='primary'
+        size='small'
+        icon='el-icon-plus'
+        @click='openModel(null)'
       >
         新增
       </el-button>
       <el-button
-        type="danger"
-        size="small"
-        icon="el-icon-delete"
-        :disabled="this.categoryIdList.length == 0"
-        @click="isDelete = true"
+        type='danger'
+        size='small'
+        icon='el-icon-delete'
+        :disabled='this.categoryIdList.length == 0'
+        @click='isDelete = true'
       >
         批量删除
       </el-button>
-      <div style="margin-left:auto">
+      <div style='margin-left:auto'>
         <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入分类名"
-          style="width:200px"
-          @keyup.enter.native="searchCategories"
+          v-model='keywords'
+          prefix-icon='el-icon-search'
+          size='small'
+          placeholder='请输入分类名'
+          style='width:200px'
+          @keyup.enter.native='searchCategories'
         />
         <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="searchCategories"
+          type='primary'
+          size='small'
+          icon='el-icon-search'
+          style='margin-left:1rem'
+          @click='searchCategories'
         >
           搜索
         </el-button>
@@ -45,36 +45,36 @@
     <!-- 表格展示 -->
     <el-table
       border
-      :data="categoryList"
-      @selection-change="selectionChange"
-      v-loading="loading"
-      element-loading-text="Loading..."
+      :data='categoryList'
+      @selection-change='selectionChange'
+      v-loading='loading'
+      element-loading-text='Loading...'
     >
       <!-- 表格列 -->
-      <el-table-column type="selection" width="55" />
+      <el-table-column type='selection' width='55' />
       <!-- 分类名 -->
-      <el-table-column prop="categoryName" label="分类名" align="center" />
+      <el-table-column prop='categoryName' label='分类名' align='center' />
       <!-- 文章量 -->
-      <el-table-column prop="articleCount" label="文章量" align="center" />
+      <el-table-column prop='articleCount' label='文章量' align='center' />
       <!-- 分类创建时间 -->
-      <el-table-column prop="createTime" label="创建时间" align="center">
-        <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
+      <el-table-column prop='createTime' label='创建时间' align='center'>
+        <template slot-scope='scope'>
+          <i class='el-icon-time' style='margin-right:5px' />
           {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
       <!-- 列操作 -->
-      <el-table-column label="操作" width="160" align="center">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="openModel(scope.row)">
+      <el-table-column label='操作' width='160' align='center'>
+        <template slot-scope='scope'>
+          <el-button type='primary' size='mini' @click='openModel(scope.row)'>
             编辑
           </el-button>
           <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:1rem"
-            @onConfirm="deleteCategory(scope.row.id)"
+            title='确定删除吗？'
+            style='margin-left:1rem'
+            @onConfirm='deleteCategory(scope.row.id)'
           >
-            <el-button size="mini" type="danger" slot="reference">
+            <el-button size='mini' type='danger' slot='reference'>
               删除
             </el-button>
           </el-popconfirm>
@@ -83,40 +83,40 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-      class="pagination-container"
+      class='pagination-container'
       background
-      @size-change="sizeChange"
-      @current-change="currentChange"
-      :current-page="current"
-      :page-size="size"
-      :total="count"
-      :page-sizes="[10, 20]"
-      layout="total, sizes, prev, pager, next, jumper"
+      @size-change='sizeChange'
+      @current-change='currentChange'
+      :current-page='current'
+      :page-size='size'
+      :total='count'
+      :page-sizes='[10, 20]'
+      layout='total, sizes, prev, pager, next, jumper'
     />
     <!-- 批量删除对话框 -->
-    <el-dialog :visible.sync="isDelete" width="30%">
-      <div class="dialog-title-container" slot="title">
-        <i class="el-icon-warning" style="color:#ff9900" />提示
+    <el-dialog :visible.sync='isDelete' width='30%'>
+      <div class='dialog-title-container' slot='title'>
+        <i class='el-icon-warning' style='color:#ff9900' />提示
       </div>
-      <div style="font-size:1rem">是否删除选中项？</div>
-      <div slot="footer">
-        <el-button @click="isDelete = false">取 消</el-button>
-        <el-button type="primary" @click="deleteCategory(null)">
+      <div style='font-size:1rem'>是否删除选中项？</div>
+      <div slot='footer'>
+        <el-button @click='isDelete = false'>取 消</el-button>
+        <el-button type='primary' @click='deleteCategory(null)'>
           确 定
         </el-button>
       </div>
     </el-dialog>
     <!-- 添加编辑对话框 -->
-    <el-dialog :visible.sync="addOrEdit" width="30%">
-      <div class="dialog-title-container" slot="title" ref="categoryTitle" />
-      <el-form label-width="80px" size="medium" :model="categoryForm">
-        <el-form-item label="分类名">
-          <el-input v-model="categoryForm.categoryName" style="width:220px" />
+    <el-dialog :visible.sync='addOrEdit' width='30%'>
+      <div class='dialog-title-container' slot='title' ref='categoryTitle' />
+      <el-form label-width='80px' size='medium' :model='categoryForm'>
+        <el-form-item label='分类名'>
+          <el-input v-model='categoryForm.categoryName' style='width:220px' />
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button @click="addOrEdit = false">取 消</el-button>
-        <el-button type="primary" @click="addOrEditCategory">
+      <div slot='footer'>
+        <el-button @click='addOrEdit = false'>取 消</el-button>
+        <el-button type='primary' @click='addOrEditCategory'>
           确 定
         </el-button>
       </div>
@@ -127,7 +127,7 @@
 <script>
 export default {
   created() {
-    this.listCategories();
+    this.listCategories()
   },
   data: function() {
     return {
@@ -139,58 +139,58 @@ export default {
       categoryList: [],
       categoryForm: {
         id: null,
-        categoryName: ""
+        categoryName: ''
       },
       current: 1,
       size: 10,
       count: 0
-    };
+    }
   },
   methods: {
     searchCategories() {
-      this.current = 1;
-      this.listCategories();
+      this.current = 1
+      this.listCategories()
     },
     selectionChange(categoryList) {
-      this.categoryIdList = [];
+      this.categoryIdList = []
       categoryList.forEach(item => {
-        this.categoryIdList.push(item.id);
-      });
+        this.categoryIdList.push(item.id)
+      })
     },
     sizeChange(size) {
-      this.size = size;
-      this.listCategories();
+      this.size = size
+      this.listCategories()
     },
     currentChange(current) {
-      this.current = current;
-      this.listCategories();
+      this.current = current
+      this.listCategories()
     },
     deleteCategory(id) {
-      let param = {};
+      let param = {}
       if (id == null) {
-        param = { data: this.categoryIdList };
+        param = { data: this.categoryIdList }
       } else {
-        param = { data: [id] };
+        param = { data: [id] }
       }
-      this.axios.delete("/api/admin/categories", param).then(({ data }) => {
+      this.axios.delete('/api/admin/categories', param).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
-            title: "成功",
+            title: '成功',
             message: data.message
-          });
-          this.listCategories();
+          })
+          this.listCategories()
         } else {
           this.$notify.error({
-            title: "失败",
+            title: '失败',
             message: data.message
-          });
+          })
         }
-        this.isDelete = false;
-      });
+        this.isDelete = false
+      })
     },
     listCategories() {
       this.axios
-        .get("/api/admin/categories", {
+        .get('/api/admin/categories', {
           params: {
             current: this.current,
             size: this.size,
@@ -198,45 +198,45 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.categoryList = data.data.recordList;
-          this.count = data.data.count;
-          this.loading = false;
-        });
+          this.categoryList = data.data.recordList
+          this.count = data.data.count
+          this.loading = false
+        })
     },
     openModel(category) {
       if (category != null) {
-        this.categoryForm = JSON.parse(JSON.stringify(category));
-        this.$refs.categoryTitle.innerHTML = "修改分类";
+        this.categoryForm = JSON.parse(JSON.stringify(category))
+        this.$refs.categoryTitle.innerHTML = '修改分类'
       } else {
-        this.categoryForm.id = null;
-        this.categoryForm.categoryName = "";
-        this.$refs.categoryTitle.innerHTML = "添加分类";
+        this.categoryForm.id = null
+        this.categoryForm.categoryName = ''
+        this.$refs.categoryTitle.innerHTML = '添加分类'
       }
-      this.addOrEdit = true;
+      this.addOrEdit = true
     },
     addOrEditCategory() {
-      if (this.categoryForm.categoryName.trim() == "") {
-        this.$message.error("分类名不能为空");
-        return false;
+      if (this.categoryForm.categoryName.trim() == '') {
+        this.$message.error('分类名不能为空')
+        return false
       }
       this.axios
-        .post("/api/admin/categories", this.categoryForm)
+        .post('/api/admin/categories', this.categoryForm)
         .then(({ data }) => {
           if (data.flag) {
             this.$notify.success({
-              title: "成功",
+              title: '成功',
               message: data.message
-            });
-            this.listCategories();
+            })
+            this.listCategories()
           } else {
             this.$notify.error({
-              title: "失败",
+              title: '失败',
               message: data.message
-            });
+            })
           }
-          this.addOrEdit = false;
-        });
+          this.addOrEdit = false
+        })
     }
   }
-};
+}
 </script>

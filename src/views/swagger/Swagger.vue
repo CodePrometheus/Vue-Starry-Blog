@@ -1,8 +1,8 @@
 <template>
-  <el-card class="main-card">
+  <el-card class='main-card'>
     <iframe
-      src="http://localhost:8989/swagger-ui/index.html"
-      class="iframe"
+      src='http://localhost:8989/swagger-ui/index.html'
+      class='iframe'
     />
   </el-card>
 </template>

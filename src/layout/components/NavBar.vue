@@ -1,55 +1,55 @@
 <template>
   <div>
     <!-- 导航栏 -->
-    <div class="nav-bar">
+    <div class='nav-bar'>
       <!-- 折叠按钮 -->
-      <div class="hambuger-container" @click="trigger">
-        <i :class="isFold" />
+      <div class='hambuger-container' @click='trigger'>
+        <i :class='isFold' />
       </div>
       <!-- 面包屑导航 -->
       <el-breadcrumb>
-        <el-breadcrumb-item v-for="item of breadcrumbList" :key="item.path">
-          <span v-if="item.redirect">{{ item.name }}</span>
-          <router-link v-else :to="item.path">{{ item.name }}</router-link>
+        <el-breadcrumb-item v-for='item of breadcrumbList' :key='item.path'>
+          <span v-if='item.redirect'>{{ item.name }}</span>
+          <router-link v-else :to='item.path'>{{ item.name }}</router-link>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 右侧菜单 -->
-      <div class="right-menu">
+      <div class='right-menu'>
         <!-- 全屏按钮 -->
-        <div class="screen-full" @click="fullScreen">
-          <i class="iconfont el-icon-myicwindowzoom48px" />
+        <div class='screen-full' @click='fullScreen'>
+          <i class='iconfont el-icon-myicwindowzoom48px' />
         </div>
         <!-- 用户选项 -->
-        <el-dropdown @command="handleCommand">
-          <el-avatar :size="40" :src="this.$store.state.avatar" />
-          <i class="el-icon-caret-bottom" />
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="setting">
-              <i class="el-icon-s-custom" />个人中心
+        <el-dropdown @command='handleCommand'>
+          <el-avatar :size='40' :src='this.$store.state.avatar' />
+          <i class='el-icon-caret-bottom' />
+          <el-dropdown-menu slot='dropdown'>
+            <el-dropdown-item command='setting'>
+              <i class='el-icon-s-custom' />个人中心
             </el-dropdown-item>
-            <el-dropdown-item command="logout" divided>
-              <i class="iconfont el-icon-mytuichu" />退出登录
+            <el-dropdown-item command='logout' divided>
+              <i class='iconfont el-icon-mytuichu' />退出登录
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
     <!-- 历史标签栏 -->
-    <div class="tabs-view-container">
+    <div class='tabs-view-container'>
       <span
-        :class="isActive(item)"
-        v-for="item of this.$store.state.tabList"
-        :key="item.path"
-        @click="goTo(item)"
+        :class='isActive(item)'
+        v-for='item of this.$store.state.tabList'
+        :key='item.path'
+        @click='goTo(item)'
       >
         {{ item.name }}
         <i
-          class="el-icon-close"
+          class='el-icon-close'
           v-if="item.path != '/'"
-          @click.stop="removeTab(item)"
+          @click.stop='removeTab(item)'
         />
       </span>
-      <span class="tabs-view-item" style="float:right" @click="closeAllTab">
+      <span class='tabs-view-item' style='float:right' @click='closeAllTab'>
         全部关闭
       </span>
     </div>
@@ -57,86 +57,86 @@
 </template>
 
 <script>
-import { resetRouter } from "@/router";
+import { resetRouter } from '@/router'
 
 export default {
   created() {
     //替换面包屑导航
-    let matched = this.$route.matched.filter(item => item.name);
-    const first = matched[0];
-    if (first && first.name !== "首页") {
-      matched = [{ path: "/", name: "首页" }].concat(matched);
+    let matched = this.$route.matched.filter(item => item.name)
+    const first = matched[0]
+    if (first && first.name !== '首页') {
+      matched = [{ path: '/', name: '首页' }].concat(matched)
     }
-    this.breadcrumbList = matched;
+    this.breadcrumbList = matched
     //保存当前页标签
-    this.$store.commit("saveTab", this.$route);
+    this.$store.commit('saveTab', this.$route)
   },
   data: function() {
     return {
       isSearch: false,
       fullscreen: false,
       breadcrumbList: []
-    };
+    }
   },
   methods: {
     goTo(tab) {
       //跳转标签
-      this.$router.push({ path: tab.path });
+      this.$router.push({ path: tab.path })
     },
     removeTab(tab) {
       //删除标签
-      this.$store.commit("removeTab", tab);
+      this.$store.commit('removeTab', tab)
       //如果删除的是当前页则返回上一标签页
       if (tab.path == this.$route.path) {
-        let tabList = this.$store.state.tabList;
-        this.$router.push({ path: tabList[tabList.length - 1].path });
+        let tabList = this.$store.state.tabList
+        this.$router.push({ path: tabList[tabList.length - 1].path })
       }
     },
     trigger() {
-      this.$store.commit("trigger");
+      this.$store.commit('trigger')
     },
     handleCommand(command) {
-      if (command == "setting") {
-        this.$router.push({ path: "/setting" });
+      if (command == 'setting') {
+        this.$router.push({ path: '/setting' })
       }
-      if (command == "logout") {
+      if (command == 'logout') {
         // 注销接口
-        this.axios.post("/api/logout");
-        this.$store.commit("logout");
-        this.$store.commit("resetTab");
+        this.axios.post('/api/logout')
+        this.$store.commit('logout')
+        this.$store.commit('resetTab')
         // 清空用户菜单
-        resetRouter();
-        this.$router.push({ path: "/login" });
+        resetRouter()
+        this.$router.push({ path: '/login' })
       }
     },
     closeAllTab() {
-      this.$store.commit("resetTab");
-      this.$router.push({ path: "/" });
+      this.$store.commit('resetTab')
+      this.$router.push({ path: '/' })
     },
     fullScreen() {
-      let element = document.documentElement;
+      let element = document.documentElement
       if (this.fullscreen) {
         if (document.exitFullscreen) {
-          document.exitFullscreen();
+          document.exitFullscreen()
         } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
+          document.webkitCancelFullScreen()
         } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
+          document.mozCancelFullScreen()
         } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
+          document.msExitFullscreen()
         }
       } else {
         if (element.requestFullscreen) {
-          element.requestFullscreen();
+          element.requestFullscreen()
         } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
+          element.webkitRequestFullScreen()
         } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
+          element.mozRequestFullScreen()
         } else if (element.msRequestFullscreen) {
-          element.msRequestFullscreen();
+          element.msRequestFullscreen()
         }
       }
-      this.fullscreen = !this.fullscreen;
+      this.fullscreen = !this.fullscreen
     }
   },
   computed: {
@@ -144,16 +144,16 @@ export default {
     isActive() {
       return function(tab) {
         if (tab.path == this.$route.path) {
-          return "tabs-view-item-active";
+          return 'tabs-view-item-active'
         }
-        return "tabs-view-item";
-      };
+        return 'tabs-view-item'
+      }
     },
     isFold() {
-      return this.$store.state.collapse ? "el-icon-s-unfold" : "el-icon-s-fold";
+      return this.$store.state.collapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'
     }
   }
-};
+}
 </script>
 
 <style scoped>

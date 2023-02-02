@@ -1,203 +1,203 @@
 <template>
-  <el-card class="main-card">
-    <div class="title">
+  <el-card class='main-card'>
+    <div class='title'>
       {{ this.$route.name }}
     </div>
     <!-- 文章标题 -->
-    <div class="article-title-container">
+    <div class='article-title-container'>
       <el-input
-        v-model="article.articleTitle"
-        size="medium"
-        placeholder="输入文章标题"
+        v-model='article.articleTitle'
+        size='medium'
+        placeholder='输入文章标题'
       />
       <el-button
-        type="danger"
-        size="medium"
-        class="save-btn"
-        @click="saveArticleDraft"
-        v-if="article.id != null || article.status == 3"
+        type='danger'
+        size='medium'
+        class='save-btn'
+        @click='saveArticleDraft'
+        v-if='article.id != null || article.status == 3'
       >
         保存草稿
       </el-button>
       <el-button
-        type="danger"
-        size="medium"
-        @click="openModel"
-        style="margin-left:10px"
+        type='danger'
+        size='medium'
+        @click='openModel'
+        style='margin-left:10px'
       >
         发布文章
       </el-button>
     </div>
     <!-- 文章内容 -->
     <mavon-editor
-      ref="md"
-      v-model="article.articleContent"
-      @imgAdd="uploadImg"
-      style="height:calc(100vh - 260px)"
+      ref='md'
+      v-model='article.articleContent'
+      @imgAdd='uploadImg'
+      style='height:calc(100vh - 260px)'
     />
     <!-- 添加文章对话框 -->
-    <el-dialog :visible.sync="addOrEdit" width="40%" top="10vh">
-      <div class="dialog-title-container" slot="title">
+    <el-dialog :visible.sync='addOrEdit' width='40%' top='10vh'>
+      <div class='dialog-title-container' slot='title'>
         发布文章
       </div>
       <!-- 文章数据 -->
-      <el-form label-width="80px" size="medium" :model="article">
+      <el-form label-width='80px' size='medium' :model='article'>
         <!-- 文章分类 -->
-        <el-form-item label="文章分类">
+        <el-form-item label='文章分类'>
           <el-tag
-            type="success"
-            v-show="article.categoryName"
-            style="margin:0 1rem 0 0"
-            :closable="true"
-            @close="removeCategory"
+            type='success'
+            v-show='article.categoryName'
+            style='margin:0 1rem 0 0'
+            :closable='true'
+            @close='removeCategory'
           >
             {{ article.categoryName }}
           </el-tag>
           <!-- 分类选项 -->
           <el-popover
-            placement="bottom-start"
-            width="460"
-            trigger="click"
-            v-if="!article.categoryName"
+            placement='bottom-start'
+            width='460'
+            trigger='click'
+            v-if='!article.categoryName'
           >
-            <div class="popover-title">分类</div>
+            <div class='popover-title'>分类</div>
             <!-- 搜索框 -->
             <el-autocomplete
-              style="width:100%"
-              v-model="categoryName"
-              :fetch-suggestions="searchCategories"
-              placeholder="请输入分类名搜索，enter可添加自定义分类"
-              :trigger-on-focus="false"
-              @keyup.enter.native="saveCategory"
-              @select="handleSelectCategories"
+              style='width:100%'
+              v-model='categoryName'
+              :fetch-suggestions='searchCategories'
+              placeholder='请输入分类名搜索，enter可添加自定义分类'
+              :trigger-on-focus='false'
+              @keyup.enter.native='saveCategory'
+              @select='handleSelectCategories'
             >
-              <template slot-scope="{ item }">
+              <template slot-scope='{ item }'>
                 <div>{{ item.categoryName }}</div>
               </template>
             </el-autocomplete>
             <!-- 分类 -->
-            <div class="popover-container">
+            <div class='popover-container'>
               <div
-                v-for="v of categoryList"
-                :key="v.id"
-                class="category-item"
-                @click="addCategory(v)"
+                v-for='v of categoryList'
+                :key='v.id'
+                class='category-item'
+                @click='addCategory(v)'
               >
                 {{ v.categoryName }}
               </div>
             </div>
-            <el-button type="success" plain slot="reference" size="small">
+            <el-button type='success' plain slot='reference' size='small'>
               添加分类
             </el-button>
           </el-popover>
         </el-form-item>
-        <el-form-item label="文章标签">
+        <el-form-item label='文章标签'>
           <el-tag
-            v-for="(v, index) of article.tagNameList"
-            :key="index"
-            style="margin:0 1rem 0 0"
-            :closable="true"
-            @close="removeTag(v)"
+            v-for='(v, index) of article.tagNameList'
+            :key='index'
+            style='margin:0 1rem 0 0'
+            :closable='true'
+            @close='removeTag(v)'
           >
             {{ v }}
           </el-tag>
           <!-- 标签选项 -->
           <el-popover
-            placement="bottom-start"
-            width="460"
-            trigger="click"
-            v-if="article.tagNameList.length < 3"
+            placement='bottom-start'
+            width='460'
+            trigger='click'
+            v-if='article.tagNameList.length < 3'
           >
-            <div class="popover-title">标签</div>
+            <div class='popover-title'>标签</div>
             <!-- 搜索框 -->
             <el-autocomplete
-              style="width:100%"
-              v-model="tagName"
-              :fetch-suggestions="searchTags"
-              placeholder="请输入标签名搜索，enter可添加自定义标签"
-              :trigger-on-focus="false"
-              @keyup.enter.native="saveTag"
-              @select="handleSelectTag"
+              style='width:100%'
+              v-model='tagName'
+              :fetch-suggestions='searchTags'
+              placeholder='请输入标签名搜索，enter可添加自定义标签'
+              :trigger-on-focus='false'
+              @keyup.enter.native='saveTag'
+              @select='handleSelectTag'
             >
-              <template slot-scope="{ v }">
+              <template slot-scope='{ v }'>
                 <div>{{ v.tagName }}</div>
               </template>
             </el-autocomplete>
             <!-- 标签 -->
-            <div class="popover-container">
-              <div style="margin-bottom:1rem">添加标签</div>
+            <div class='popover-container'>
+              <div style='margin-bottom:1rem'>添加标签</div>
               <el-tag
-                v-for="(v, idx) of tagList"
-                :key="idx"
-                :class="tagClass(v)"
-                @click="addTag(v)"
+                v-for='(v, idx) of tagList'
+                :key='idx'
+                :class='tagClass(v)'
+                @click='addTag(v)'
               >
                 {{ v.tagName }}
               </el-tag>
             </div>
-            <el-button type="primary" plain slot="reference" size="small">
+            <el-button type='primary' plain slot='reference' size='small'>
               添加标签
             </el-button>
           </el-popover>
         </el-form-item>
         <!-- 文章类型 -->
-        <el-form-item label="文章类型">
-          <el-select v-model="article.type" placeholder="请选择类型">
+        <el-form-item label='文章类型'>
+          <el-select v-model='article.type' placeholder='请选择类型'>
             <el-option
-              v-for="item in typeList"
-              :key="item.type"
-              :label="item.desc"
-              :value="item.type"
+              v-for='item in typeList'
+              :key='item.type'
+              :label='item.desc'
+              :value='item.type'
             />
           </el-select>
         </el-form-item>
         <!-- 文章类型 -->
-        <el-form-item label="原文地址" v-if="article.type != 1">
+        <el-form-item label='原文地址' v-if='article.type != 1'>
           <el-input
-            v-model="article.originalUrl"
-            placeholder="请填写原文链接"
+            v-model='article.originalUrl'
+            placeholder='请填写原文链接'
           />
         </el-form-item>
-        <el-form-item label="上传封面">
+        <el-form-item label='上传封面'>
           <el-upload
-            class="upload-cover"
+            class='upload-cover'
             drag
-            action="/api/admin/articles/images"
+            action='/api/admin/articles/images'
             multiple
-            :on-success="uploadCover"
+            :on-success='uploadCover'
           >
-            <i class="el-icon-upload" v-if="article.articleCover == ''" />
-            <div class="el-upload__text" v-if="article.articleCover == ''">
+            <i class='el-icon-upload' v-if="article.articleCover == ''" />
+            <div class='el-upload__text' v-if="article.articleCover == ''">
               将文件拖到此处，或<em>点击上传</em>
             </div>
             <img
               v-else
-              :src="article.articleCover"
-              width="360px"
-              height="180px"
+              :src='article.articleCover'
+              width='360px'
+              height='180px'
             />
           </el-upload>
         </el-form-item>
-        <el-form-item label="置顶">
+        <el-form-item label='置顶'>
           <el-switch
-            v-model="article.isTop"
-            active-color="#13ce66"
-            inactive-color="#F4F4F5"
-            :active-value="1"
-            :inactive-value="0"
+            v-model='article.isTop'
+            active-color='#13ce66'
+            inactive-color='#F4F4F5'
+            :active-value='1'
+            :inactive-value='0'
           />
         </el-form-item>
         <!-- 发布形式 -->
-        <el-form-item label="发布形式">
-          <el-radio-group v-model="article.status">
-            <el-radio :label="1">公开</el-radio>
-            <el-radio :label="2">私密</el-radio>
+        <el-form-item label='发布形式'>
+          <el-radio-group v-model='article.status'>
+            <el-radio :label='1'>公开</el-radio>
+            <el-radio :label='2'>私密</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button @click="addOrEdit = false">取 消</el-button>
-        <el-button type="danger" @click="saveOrUpdateArticle">
+      <div slot='footer'>
+        <el-button @click='addOrEdit = false'>取 消</el-button>
+        <el-button type='danger' @click='saveOrUpdateArticle'>
           发 表
         </el-button>
       </div>
@@ -208,262 +208,262 @@
 <script>
 export default {
   created() {
-    const path = this.$route.path;
-    const arr = path.split("/");
-    const articleId = arr[2];
+    const path = this.$route.path
+    const arr = path.split('/')
+    const articleId = arr[2]
     if (articleId) {
-      this.axios.get("/api/admin/articles/" + articleId).then(({ data }) => {
-        this.article = data.data;
-      });
+      this.axios.get('/api/admin/articles/' + articleId).then(({ data }) => {
+        this.article = data.data
+      })
     } else {
-      const article = sessionStorage.getItem("article");
+      const article = sessionStorage.getItem('article')
       if (article) {
-        this.article = JSON.parse(article);
+        this.article = JSON.parse(article)
       }
     }
   },
   destroyed() {
     // 文章自动保存功能
-    this.autoSaveArticle();
+    this.autoSaveArticle()
   },
   data: function() {
     return {
       addOrEdit: false,
       autoSave: true,
-      categoryName: "",
-      tagName: "",
+      categoryName: '',
+      tagName: '',
       categoryList: [],
       tagList: [],
       typeList: [
         {
           type: 1,
-          desc: "原创"
+          desc: '原创'
         },
         {
           type: 2,
-          desc: "转载"
+          desc: '转载'
         },
         {
           type: 3,
-          desc: "翻译"
+          desc: '翻译'
         }
       ],
       article: {
         id: null,
-        articleTitle: this.$moment(new Date()).format("YYYY-MM-DD"),
-        articleContent: "",
-        articleCover: "",
+        articleTitle: this.$moment(new Date()).format('YYYY-MM-DD'),
+        articleContent: '',
+        articleCover: '',
         categoryName: null,
         tagNameList: [],
-        originalUrl: "",
+        originalUrl: '',
         isTop: 0,
         type: 1,
         status: 1
       }
-    };
+    }
   },
   methods: {
     saveTag() {
-      if (this.tagName.trim() != "") {
+      if (this.tagName.trim() != '') {
         this.addTag({
           tagName: this.tagName
-        });
-        this.tagName = "";
+        })
+        this.tagName = ''
       }
     },
     addTag(v) {
       if (this.article.tagNameList.indexOf(v.tagName) == -1) {
-        this.article.tagNameList.push(v.tagName);
+        this.article.tagNameList.push(v.tagName)
       }
     },
     removeTag(v) {
-      const idx = this.article.tagNameList.indexOf(v);
-      this.article.tagNameList.splice(idx, 1);
+      const idx = this.article.tagNameList.indexOf(v)
+      this.article.tagNameList.splice(idx, 1)
     },
     searchTags(keywords, cb) {
       this.axios
-        .get("/api/admin/tags/search", {
+        .get('/api/admin/tags/search', {
           params: {
             keywords: keywords
           }
         })
         .then(({ data }) => {
-          cb(data.data);
-        });
+          cb(data.data)
+        })
     },
     handleSelectTag(v) {
       this.addTag({
         tagName: v.tagName
-      });
+      })
     },
     handleSelectCategories(v) {
       this.addCategory({
         categoryName: v.categoryName
-      });
+      })
     },
     addCategory(v) {
-      this.article.categoryName = v.categoryName;
+      this.article.categoryName = v.categoryName
     },
     saveCategory() {
-      if (this.categoryName.trim() != "") {
+      if (this.categoryName.trim() != '') {
         this.addCategory({
           categoryName: this.categoryName
-        });
-        this.categoryName = "";
+        })
+        this.categoryName = ''
       }
     },
     searchCategories(keywords, res) {
       this.axios
-        .get("/api/admin/categories/search", {
+        .get('/api/admin/categories/search', {
           params: {
             keywords: keywords
           }
         })
         .then(({ data }) => {
-          res(data.data);
-        });
+          res(data.data)
+        })
     },
     openModel() {
-      if (this.article.articleTitle.trim() == "") {
-        this.$message.error("文章标题不能为空");
-        return false;
+      if (this.article.articleTitle.trim() == '') {
+        this.$message.error('文章标题不能为空')
+        return false
       }
-      if (this.article.articleContent.trim() == "") {
-        this.$message.error("文章内容不能为空");
-        return false;
+      if (this.article.articleContent.trim() == '') {
+        this.$message.error('文章内容不能为空')
+        return false
       }
-      this.listCategories();
-      this.listTags();
-      this.addOrEdit = true;
+      this.listCategories()
+      this.listTags()
+      this.addOrEdit = true
     },
     listCategories() {
-      this.axios.get("/api/admin/categories/search").then(({ data }) => {
-        this.categoryList = data.data;
-      });
+      this.axios.get('/api/admin/categories/search').then(({ data }) => {
+        this.categoryList = data.data
+      })
     },
     listTags() {
-      this.axios.get("/api/admin/tags/search").then(({ data }) => {
-        this.tagList = data.data;
-      });
+      this.axios.get('/api/admin/tags/search').then(({ data }) => {
+        this.tagList = data.data
+      })
     },
     removeCategory() {
-      this.article.categoryName = null;
+      this.article.categoryName = null
     },
     uploadCover(response) {
-      this.article.articleCover = response.data;
+      this.article.articleCover = response.data
     },
     uploadImg(pos, file) {
-      let formData = new FormData();
-      formData.append("file", file);
+      let formData = new FormData()
+      formData.append('file', file)
       this.axios
-        .post("/api/admin/articles/images", formData)
+        .post('/api/admin/articles/images', formData)
         .then(({ data }) => {
-          this.$refs.md.$img2Url(pos, data.data);
-        });
+          this.$refs.md.$img2Url(pos, data.data)
+        })
     },
     saveArticleDraft() {
-      if (this.article.articleTitle.trim() == "") {
-        this.$message.error("文章标题不能为空");
-        return false;
+      if (this.article.articleTitle.trim() == '') {
+        this.$message.error('文章标题不能为空')
+        return false
       }
-      if (this.article.articleContent.trim() == "") {
-        this.$message.error("文章内容不能为空");
-        return false;
+      if (this.article.articleContent.trim() == '') {
+        this.$message.error('文章内容不能为空')
+        return false
       }
-      this.article.status = 3;
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
+      this.article.status = 3
+      this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
-            title: "成功",
-            message: "保存草稿成功"
-          });
+            title: '成功',
+            message: '保存草稿成功'
+          })
         } else {
           this.$notify.error({
-            title: "失败",
-            message: "保存草稿失败"
-          });
+            title: '失败',
+            message: '保存草稿失败'
+          })
         }
-      });
+      })
       // 关闭自动保存功能
-      this.autoSave = false;
+      this.autoSave = false
     },
     saveOrUpdateArticle() {
-      if (this.article.articleTitle.trim() == "") {
-        this.$message.error("文章标题不能为空");
-        return false;
+      if (this.article.articleTitle.trim() == '') {
+        this.$message.error('文章标题不能为空')
+        return false
       }
-      if (this.article.articleContent.trim() == "") {
-        this.$message.error("文章内容不能为空");
-        return false;
+      if (this.article.articleContent.trim() == '') {
+        this.$message.error('文章内容不能为空')
+        return false
       }
       if (!this.article.categoryName == null) {
-        this.$message.error("文章分类不能为空");
-        return false;
+        this.$message.error('文章分类不能为空')
+        return false
       }
       if (this.article.tagNameList.length == 0) {
-        this.$message.error("文章标签不能为空");
-        return false;
+        this.$message.error('文章标签不能为空')
+        return false
       }
-      if (this.article.articleCover.trim() == "") {
+      if (this.article.articleCover.trim() == '') {
         // 如果图片为空，则生成随机图片
-        this.article.articleCover = "https://unsplash.it" + "/" + "600" + "/" + "400" + "?random=" + parseInt(Math.random() * 10, 10);
+        this.article.articleCover = 'https://unsplash.it' + '/' + '600' + '/' + '400' + '?random=' + parseInt(Math.random() * 10, 10)
       }
-      this.article.isDraft = 0;
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
+      this.article.isDraft = 0
+      this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
-            title: "成功",
+            title: '成功',
             message: data.message
-          });
+          })
         } else {
           this.$notify.error({
-            title: "失败",
+            title: '失败',
             message: data.message
-          });
+          })
         }
-        this.addOrEdit = false;
-      });
+        this.addOrEdit = false
+      })
       // 关闭自动保存功能
-      this.autoSave = false;
+      this.autoSave = false
     },
     autoSaveArticle() {
       if (
         this.autoSave &&
-        this.article.articleTitle.trim() != "" &&
-        this.article.articleContent.trim() != "" &&
+        this.article.articleTitle.trim() != '' &&
+        this.article.articleContent.trim() != '' &&
         this.article.id != null
       ) {
         this.axios
-          .post("/api/admin/articles", this.article)
+          .post('/api/admin/articles', this.article)
           .then(({ data }) => {
             if (data.flag) {
               this.$notify.success({
-                title: "成功",
-                message: "自动保存成功"
-              });
+                title: '成功',
+                message: '自动保存成功'
+              })
             } else {
               this.$notify.error({
-                title: "失败",
-                message: "自动保存失败"
-              });
+                title: '失败',
+                message: '自动保存失败'
+              })
             }
-          });
+          })
       }
       // 在本地也保存一份
       if (this.autoSave && this.article.id == null) {
-        sessionStorage.setItem("article", JSON.stringify(this.article));
+        sessionStorage.setItem('article', JSON.stringify(this.article))
       }
     }
   },
   computed: {
     tagClass() {
       return function(v) {
-        const idx = this.article.tagNameList.indexOf(v.tagName);
-        return idx != -1 ? "tag-item-select" : "tag-item";
-      };
+        const idx = this.article.tagNameList.indexOf(v.tagName)
+        return idx != -1 ? 'tag-item-select' : 'tag-item'
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>
