@@ -53,7 +53,6 @@ export default {
     const momentId = arr[2]
     if (momentId) {
       this.axios.get('/api/admin/moments/' + momentId).then(({ data }) => {
-        console.log(data)
         this.moment = data.data
       })
     } else {

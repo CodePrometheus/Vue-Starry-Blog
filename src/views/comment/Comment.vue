@@ -290,7 +290,6 @@ export default {
       }
       this.axios.delete('/api/admin/comments', param).then(({ data }) => {
         if (data.flag) {
-          console.log('deleteComments: ', param)
           this.$notify.success({
             title: '成功',
             message: data.message

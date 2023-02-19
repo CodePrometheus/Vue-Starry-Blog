@@ -36,6 +36,7 @@ Vue.config.productionTip = false
 Vue.prototype.$moment = dayjs
 
 Vue.filter('date', function (value, formatStr = 'YYYY-MM-DD') {
+  if (value == null) return null
   return dayjs(value).format(formatStr)
 })
 

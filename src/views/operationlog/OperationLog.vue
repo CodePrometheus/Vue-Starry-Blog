@@ -6,7 +6,7 @@
         type='danger'
         size='small'
         icon='el-icon-delete'
-        :disabled='this.logIdList.length == 0'
+        :disabled='this.logIdList.length === 0'
         @click='isDelete = true'
       >
         批量删除
@@ -124,27 +124,27 @@
         <i class='el-icon-more' />详细信息
       </div>
       <el-form ref='form' :model='optLog' label-width='100px' size='mini'>
-        <el-form-item label='操作模块：'>
+        <el-form-item label='操作模块'>
           {{ optLog.optModule }}
         </el-form-item>
-        <el-form-item label='请求地址：'>
+        <el-form-item label='请求地址'>
           {{ optLog.optUrl }}
         </el-form-item>
-        <el-form-item label='请求方式：'>
+        <el-form-item label='请求方式'>
           <el-tag :type='tagType(optLog.requestMethod)'>
             {{ optLog.requestMethod }}
           </el-tag>
         </el-form-item>
-        <el-form-item label='操作方法：'>
+        <el-form-item label='操作方法'>
           {{ optLog.optMethod }}
         </el-form-item>
-        <el-form-item label='请求参数：'>
+        <el-form-item label='请求参数'>
           {{ optLog.requestParam }}
         </el-form-item>
-        <el-form-item label='返回数据：'>
+        <el-form-item label='返回数据'>
           {{ optLog.responseData }}
         </el-form-item>
-        <el-form-item label='操作人员：'>
+        <el-form-item label='操作人员'>
           {{ optLog.nickname }}
         </el-form-item>
       </el-form>

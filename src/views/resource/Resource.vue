@@ -11,6 +11,14 @@
         新增模块
       </el-button>
       <div style='margin-left:auto'>
+        <el-switch
+          style='margin-right: 15px'
+          v-model='isAnonymous'
+          :active-value='1'
+          :inactive-value='0'
+          active-text='匿名'
+        >
+        </el-switch>
         <el-input
           v-model='keywords'
           prefix-icon='el-icon-search'
@@ -146,6 +154,7 @@ export default {
   },
   data() {
     return {
+      isAnonymous: 0,
       loading: true,
       resourceList: [],
       addModel: false,
@@ -247,6 +256,20 @@ export default {
         this.$refs.modelTitle.innerHTML = '添加模块'
       }
       this.addModel = true
+    }
+  },
+  watch: {
+    isAnonymous() {
+      this.axios
+        .get('/api/admin/resources', {
+          params: {
+            isAnonymous: this.isAnonymous
+          }
+        })
+        .then(({ data }) => {
+          this.resourceList = data.data
+          this.loading = false
+        })
     }
   },
   computed: {

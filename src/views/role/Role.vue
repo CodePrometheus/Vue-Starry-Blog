@@ -81,7 +81,7 @@
           {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
-      <el-table-column label='操作' align='center' width='200'>
+      <el-table-column label='操作' align='center' width='220'>
         <template slot-scope='scope'>
           <el-button type='text' size='mini' @click='openMenuModel(scope.row)'>
             <i class='el-icon-edit' /> 菜单权限
@@ -265,7 +265,7 @@ export default {
         })
         .then(({ data }) => {
           this.roleList = data.data.recordList
-          this.current = data.data.count
+          this.count = data.data.count
           this.loading = false
         })
       this.axios.get('/api/admin/role/resources').then(({ data }) => {
